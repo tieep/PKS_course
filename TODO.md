@@ -3,10 +3,10 @@
 ## 0. Chuẩn bị dự án
 
 - [ ] Xác nhận stack: React + React Router ở frontend, Express + MySQL ở backend.
-- [ ] Cài dependency backend: `bcrypt`, `jsonwebtoken`, `express-validator` hoặc thư viện validation tương đương.
+- [x] Cài dependency backend: `bcrypt`, `jsonwebtoken`, `express-validator` hoặc thư viện validation tương đương.
 - [ ] Cài dependency frontend: `react-router-dom`, thư viện toast/notification và thư viện test nếu cần.
-- [ ] Bổ sung `.env.example`; không commit `.env`, JWT secret hoặc thông tin database.
-- [ ] Cấu hình CORS theo origin frontend và thêm middleware xử lý lỗi tập trung.
+- [x] Bổ sung `.env.example`; không commit `.env`, JWT secret hoặc thông tin database.
+- [x] Cấu hình CORS theo origin frontend và thêm middleware xử lý lỗi tập trung.
 
 ## 1. Database và migration
 
@@ -22,39 +22,39 @@
 
 ### Cấu trúc và lỗi
 
-- [ ] Tách routes, controllers, services, middlewares và database queries thay vì dồn logic vào `server.js`.
-- [ ] Thêm middleware parse JSON, CORS, request validation và error handler cuối pipeline.
-- [ ] Chuẩn hóa response thành công/lỗi và mã HTTP: `400`, `401`, `403`, `404`, `409`, `422`, `500`.
-- [ ] Giữ và mở rộng `GET /api/health` để kiểm tra API và MySQL.
+- [x] Tách routes, controllers, services, middlewares và database queries thay vì dồn logic vào `server.js`.
+- [x] Thêm middleware parse JSON, CORS, request validation và error handler cuối pipeline.
+- [x] Chuẩn hóa response thành công/lỗi và mã HTTP: `400`, `401`, `403`, `404`, `409`, `422`, `500`.
+- [x] Giữ và mở rộng `GET /api/health` để kiểm tra API và MySQL.
 
 ### Authentication và authorization
 
-- [ ] `POST /api/auth/register`: đăng ký bằng họ tên, email, mật khẩu.
-- [ ] Kiểm tra email hợp lệ và không cho đăng ký email trùng.
-- [ ] Hash mật khẩu bằng bcrypt với salt rounds tối thiểu 10; tuyệt đối không trả password/hash về client.
-- [ ] `POST /api/auth/login`: xác thực email/mật khẩu và trả JWT có `userId`, `role`, thời hạn.
-- [ ] `GET /api/auth/me` hoặc endpoint tương đương để lấy user hiện tại.
-- [ ] Tạo middleware xác thực Bearer JWT và middleware kiểm tra role.
-- [ ] Bảo vệ toàn bộ route admin; student không được gọi API quản trị.
+- [x] `POST /api/auth/register`: đăng ký bằng họ tên, email, mật khẩu.
+- [x] Kiểm tra email hợp lệ và không cho đăng ký email trùng.
+- [x] Hash mật khẩu bằng bcrypt với salt rounds tối thiểu 10; tuyệt đối không trả password/hash về client.
+- [x] `POST /api/auth/login`: xác thực email/mật khẩu và trả JWT có `userId`, `role`, thời hạn.
+- [x] `GET /api/auth/me` hoặc endpoint tương đương để lấy user hiện tại.
+- [x] Tạo middleware xác thực Bearer JWT và middleware kiểm tra role.
+- [x] Bảo vệ toàn bộ route admin; student không được gọi API quản trị.
 
 ### Student APIs
 
-- [ ] `GET /api/courses`: danh sách khóa học dạng card, hỗ trợ tìm kiếm theo tên/instructor và lọc category.
-- [ ] Trả về đầy đủ: tên, danh mục, giảng viên, capacity, số đã đăng ký, trạng thái còn chỗ/hết chỗ.
-- [ ] `POST /api/courses/:courseId/enroll`: đăng ký khóa học.
-- [ ] Từ chối đăng ký trùng, khóa học không tồn tại và khóa học đã đầy.
-- [ ] Dùng transaction + row lock (`SELECT ... FOR UPDATE`) khi kiểm tra/tăng số lượng đăng ký để tránh overbooking.
-- [ ] `GET /api/me/enrollments`: danh sách khóa học student đã đăng ký.
-- [ ] `DELETE /api/courses/:courseId/enroll` hoặc endpoint hủy đăng ký nếu phạm vi đề cho phép.
+- [x] `GET /api/courses`: danh sách khóa học dạng card, hỗ trợ tìm kiếm theo tên/instructor và lọc category.
+- [x] Trả về đầy đủ: tên, danh mục, giảng viên, capacity, số đã đăng ký, trạng thái còn chỗ/hết chỗ.
+- [x] `POST /api/courses/:courseId/enroll`: đăng ký khóa học.
+- [x] Từ chối đăng ký trùng, khóa học không tồn tại và khóa học đã đầy.
+- [x] Dùng transaction + row lock (`SELECT ... FOR UPDATE`) khi kiểm tra/tăng số lượng đăng ký để tránh overbooking.
+- [x] `GET /api/me/enrollments`: danh sách khóa học student đã đăng ký.
+- [x] `DELETE /api/courses/:courseId/enroll` hoặc endpoint hủy đăng ký nếu phạm vi đề cho phép.
 
 ### Admin APIs
 
-- [ ] `GET /api/admin/courses`: danh sách khóa học cho admin.
-- [ ] `POST /api/admin/courses`: tạo khóa học.
-- [ ] `PUT /api/admin/courses/:id`: chỉnh sửa khóa học.
-- [ ] `DELETE /api/admin/courses/:id`: xóa khóa học có kiểm tra ràng buộc đăng ký.
-- [ ] `GET /api/admin/courses/:id/students`: danh sách student đã đăng ký, gồm email, tên, khóa học, thời gian đăng ký, trạng thái.
-- [ ] Validate body/query params cho tất cả endpoint; không tin dữ liệu từ client.
+- [x] `GET /api/admin/courses`: danh sách khóa học cho admin.
+- [x] `POST /api/admin/courses`: tạo khóa học.
+- [x] `PUT /api/admin/courses/:id`: chỉnh sửa khóa học.
+- [x] `DELETE /api/admin/courses/:id`: xóa khóa học có kiểm tra ràng buộc đăng ký.
+- [x] `GET /api/admin/courses/:id/students`: danh sách student đã đăng ký, gồm email, tên, khóa học, thời gian đăng ký, trạng thái.
+- [x] Validate body/query params cho tất cả endpoint; không tin dữ liệu từ client.
 - [ ] Viết test cho auth, role guard, CRUD khóa học, duplicate enrollment và race condition/capacity.
 
 ## 3. Frontend React

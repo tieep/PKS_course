@@ -1,0 +1,172 @@
+@baseUrl = http://localhost:3000
+# @studentToken = paste-student-jwt-here
+@studentToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJTVFVERU5UIiwiaWF0IjoxNzkxNjkyOTE1LCJleHAiOjE3OTE3MDAxMTV9.tmW40XBxgrDA1r8dVOqH2YDi9lWfp7BrhJBol5e5YBA
+@adminToken = paste-admin-jwt-here
+@courseId = 2
+
+### =====================================================
+### 1. Health
+### =====================================================
+
+### Kiểm tra API và kết nối MySQL
+GET {{baseUrl}}/api/health
+
+### =====================================================
+### 2. Authentication
+### =====================================================
+
+### Đăng ký student mới
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "Noname 1111",
+  "email": "Testing@example.com",
+  "password": "123456"
+}
+
+### Đăng nhập student demo
+# Copy data.token từ response và gán vào @studentToken ở đầu file.
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "testing@example.com",
+  "password": "123456"
+}
+
+### Đăng nhập admin demo
+# Copy data.token từ response và gán vào @adminToken ở đầu file.
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@pks-course.local",
+  "password": "password"
+}
+
+### Lấy thông tin student hiện tại
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{studentToken}}
+
+### Lấy thông tin admin hiện tại
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{adminToken}}
+
+### =====================================================
+### 3. Student - Courses
+### =====================================================
+
+### Danh sách tất cả khóa học
+GET {{baseUrl}}/api/courses
+
+### Tìm kiếm theo tên khóa học hoặc instructor
+GET {{baseUrl}}/api/courses?search=React
+
+### Lọc theo category
+GET {{baseUrl}}/api/courses?category=Frontend
+
+### Tìm kiếm kết hợp lọc category
+GET {{baseUrl}}/api/courses?search=course&category=Backend
+
+### Student đăng ký khóa học
+POST {{baseUrl}}/api/courses/{{courseId}}/enroll
+Authorization: Bearer {{studentToken}}
+
+### Student xem các khóa học đã đăng ký
+GET {{baseUrl}}/api/me/enrollments
+Authorization: Bearer {{studentToken}}
+
+### Student hủy đăng ký khóa học
+DELETE {{baseUrl}}/api/courses/{{courseId}}/enroll
+Authorization: Bearer {{studentToken}}
+
+### =====================================================
+### 4. Admin - Course management
+### =====================================================
+
+### Admin đổi role của user thành ADMIN hoặc STUDENT
+# Đổi userId=5 thành ID user thực tế cần cập nhật.
+PATCH {{baseUrl}}/api/admin/users/5/role
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "role": "ADMIN"
+}
+
+### Admin xem danh sách khóa học
+GET {{baseUrl}}/api/admin/courses
+Authorization: Bearer {{adminToken}}
+
+### Admin tìm kiếm/lọc khóa học
+GET {{baseUrl}}/api/admin/courses?search=React&category=Frontend
+Authorization: Bearer {{adminToken}}
+
+### Admin tạo khóa học
+POST {{baseUrl}}/api/admin/courses
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Node.js Advanced",
+  "category": "Backend",
+  "description": "Advanced Express.js and MySQL course",
+  "instructor": "Admin Demo",
+  "capacity": 20
+}
+
+### Admin cập nhật khóa học
+PUT {{baseUrl}}/api/admin/courses/{{courseId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "React Fundamentals Updated",
+  "category": "Frontend",
+  "description": "Updated React course description",
+  "instructor": "Le Minh Hoang",
+  "capacity": 30
+}
+
+### Admin xem danh sách student trong khóa học
+GET {{baseUrl}}/api/admin/courses/{{courseId}}/students
+Authorization: Bearer {{adminToken}}
+
+### Admin xóa khóa học
+# Chỉ xóa được khóa học chưa có enrollment.
+DELETE {{baseUrl}}/api/admin/courses/{{courseId}}
+Authorization: Bearer {{adminToken}}
+
+### =====================================================
+### 5. Error and permission checks
+### =====================================================
+
+### Không có JWT -> 401
+GET {{baseUrl}}/api/auth/me
+
+### JWT không hợp lệ -> 401
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer invalid-token
+
+### Student gọi admin API -> 403
+GET {{baseUrl}}/api/admin/courses
+Authorization: Bearer {{studentToken}}
+
+### Đăng ký trùng -> 409 nếu đã đăng ký courseId
+POST {{baseUrl}}/api/courses/{{courseId}}/enroll
+Authorization: Bearer {{studentToken}}
+
+### Course không tồn tại -> 404
+GET {{baseUrl}}/api/admin/courses/999999/students
+Authorization: Bearer {{adminToken}}
+
+### Body không hợp lệ -> 422
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "A",
+  "email": "not-an-email",
+  "password": "123"
+}
