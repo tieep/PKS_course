@@ -3,10 +3,11 @@ const HttpError = require('../utils/httpError');
 
 function requireAuth(req, res, next) {
   const header = req.get('authorization') || '';
-  const [scheme, token] = header.split(' ');
+  const [scheme, headerToken] = header.split(' ');
+  const token = req.cookies?.access_token || (scheme === 'Bearer' ? headerToken : null);
 
-  if (scheme !== 'Bearer' || !token) {
-    return next(new HttpError(401, 'Bearer token is required'));
+  if (!token) {
+    return next(new HttpError(401, 'Authentication is required'));
   }
 
   try {

@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const pool = require('./config/database');
 require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
@@ -11,8 +12,9 @@ const { notFoundHandler, errorHandler } = require('./middlewares/errorHandler');
 const app = express();
 const port = Number(process.env.PORT) || 3000;
 
-app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:5173' }));
+app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:5173', credentials: true }));
 app.use(express.json());
+app.use(cookieParser());
 
 app.get('/api/health', async (req, res) => {
   try {
