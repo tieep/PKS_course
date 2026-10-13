@@ -38,7 +38,7 @@ Create database `pks_course` and import data:
    ```text
    PKS_Course_Be/database/02-schema-and-seed.sql
    ```
-NOTE: you have to create 2 new acc with this schema, one with Student role, one with Admin role(change the role from Student to Admin in DB)
+NOTE: if you use schema & seed script, you have to create 2 new acc with this schema, one with Student role, one with Admin role(change the role from Student to Admin in DB)
 ---
 
 ### 2. Backend Setup (`PKS_Course_Be`)
