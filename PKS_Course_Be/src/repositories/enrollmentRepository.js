@@ -8,17 +8,17 @@ async function create(connection, userId, courseId) {
   return result.insertId;
 }
 
-async function remove(userId, courseId) {
-  const [result] = await pool.query(
-    'DELETE FROM enrollments WHERE user_id = ? AND course_id = ?',
-    [userId, courseId],
-  );
-  return result.affectedRows > 0;
-}
+// async function remove(userId, courseId) {
+//   const [result] = await pool.query(
+//     'DELETE FROM enrollments WHERE user_id = ? AND course_id = ?',
+//     [userId, courseId],
+//   );
+//   return result.affectedRows > 0;
+// }
 
 async function listByUser(userId) {
   const [rows] = await pool.query(
-    `SELECT c.id, c.name, c.category, c.description, c.instructor, c.capacity,
+    `SELECT c.id, c.name, c.category, c.description, c.instructor, c.fee, c.capacity,
             e.enrolled_at, 'ENROLLED' AS status
      FROM enrollments e
      JOIN courses c ON c.id = e.course_id
@@ -36,4 +36,5 @@ async function exists(userId, courseId, connection = pool) {
   return Boolean(rows[0]);
 }
 
-module.exports = { create, remove, listByUser, exists };
+// module.exports = { create, remove, listByUser, exists };
+module.exports = { create, listByUser, exists };

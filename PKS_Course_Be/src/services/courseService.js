@@ -13,6 +13,13 @@ async function list(filters) {
   return courseRepository.list(filters);
 }
 
+async function detail(id) {
+  const courseId = validateCourseId(id);
+  const course = await courseRepository.findById(courseId);
+  if (!course || course.is_hidden) throw new HttpError(404, 'Course not found');
+  return course;
+}
+
 async function create(data) {
   return courseRepository.create(data);
 }
@@ -50,6 +57,13 @@ async function remove(id) {
   return courseRepository.remove(courseId);
 }
 
+async function setVisibility(id, isHidden) {
+  const courseId = validateCourseId(id);
+  const course = await courseRepository.updateVisibility(courseId, isHidden);
+  if (!course) throw new HttpError(404, 'Course not found');
+  return course;
+}
+
 async function enroll(userId, id) {
   const courseId = validateCourseId(id);
   const connection = await pool.getConnection();
@@ -74,12 +88,12 @@ async function enroll(userId, id) {
   }
 }
 
-async function unenroll(userId, id) {
-  const courseId = validateCourseId(id);
-  const removed = await enrollmentRepository.remove(userId, courseId);
-  if (!removed) throw new HttpError(404, 'Enrollment not found');
-  return { message: 'Enrollment cancelled' };
-}
+// async function unenroll(userId, id) {
+//   const courseId = validateCourseId(id);
+//   const removed = await enrollmentRepository.remove(userId, courseId);
+//   if (!removed) throw new HttpError(404, 'Enrollment not found');
+//   return { message: 'Enrollment cancelled' };
+// }
 
 async function myEnrollments(userId) {
   return enrollmentRepository.listByUser(userId);
@@ -92,4 +106,5 @@ async function students(id) {
   return courseRepository.listStudents(courseId);
 }
 
-module.exports = { list, create, update, remove, enroll, unenroll, myEnrollments, students };
+module.exports = { list, detail, create, update, remove, setVisibility, enroll, myEnrollments, students };
+// module.exports = { list, detail, create, update, remove, setVisibility, enroll, unenroll, myEnrollments, students };

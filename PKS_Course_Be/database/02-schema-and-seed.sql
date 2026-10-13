@@ -22,12 +22,15 @@ CREATE TABLE IF NOT EXISTS courses (
   category VARCHAR(100) NOT NULL,
   description TEXT NULL,
   instructor VARCHAR(120) NOT NULL,
+  fee DECIMAL(12,2) UNSIGNED NOT NULL DEFAULT 0.00,
+  is_hidden BOOLEAN NOT NULL DEFAULT FALSE,
   capacity INT UNSIGNED NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE KEY uq_courses_name_instructor (name, instructor),
   KEY idx_courses_category (category),
+  CONSTRAINT chk_courses_fee CHECK (fee >= 0),
   CONSTRAINT chk_courses_capacity CHECK (capacity > 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -59,15 +62,16 @@ ON DUPLICATE KEY UPDATE
   full_name = VALUES(full_name),
   role = VALUES(role);
 
-INSERT INTO courses (name, category, description, instructor, capacity)
+INSERT INTO courses (name, category, description, instructor, fee, capacity)
 VALUES
-  ('React Fundamentals', 'Frontend', 'Xây dựng giao diện React từ component, state đến form.', 'Le Minh Hoang', 30),
-  ('Express.js REST API', 'Backend', 'Thiết kế REST API với Express.js, middleware và MySQL.', 'Pham Quoc Tuan', 25),
-  ('Fullstack Web Development', 'Fullstack', 'Kết nối React với Express.js để xây dựng ứng dụng hoàn chỉnh.', 'Nguyen Thanh Son', 20),
-  ('Database Design with MySQL', 'Database', 'Thiết kế schema, quan hệ, index và transaction trong MySQL.', 'Vo Ngoc Mai', 15)
+  ('React Fundamentals', 'Frontend', 'Xây dựng giao diện React từ component, state đến form.', 'Le Minh Hoang', 2500000.00, 30),
+  ('Express.js REST API', 'Backend', 'Thiết kế REST API với Express.js, middleware và MySQL.', 'Pham Quoc Tuan', 2200000.00, 25),
+  ('Fullstack Web Development', 'Fullstack', 'Kết nối React với Express.js để xây dựng ứng dụng hoàn chỉnh.', 'Nguyen Thanh Son', 4500000.00, 20),
+  ('Database Design with MySQL', 'Database', 'Thiết kế schema, quan hệ, index và transaction trong MySQL.', 'Vo Ngoc Mai', 1800000.00, 15)
 ON DUPLICATE KEY UPDATE
   category = VALUES(category),
   description = VALUES(description),
+  fee = VALUES(fee),
   capacity = VALUES(capacity);
 
 INSERT IGNORE INTO enrollments (user_id, course_id)
@@ -84,19 +88,3 @@ CROSS JOIN courses AS course
 WHERE student.email = 'student2@pks-course.local'
   AND course.name IN ('Express.js REST API');
 
--- -- Kiểm tra số lượng đã đăng ký và trạng thái còn chỗ.
--- SELECT
---   c.id,
---   c.name,
---   c.category,
---   c.instructor,
---   c.capacity,
---   COUNT(e.id) AS enrolled_count,
---   CASE
---     WHEN COUNT(e.id) >= c.capacity THEN 'FULL'
---     ELSE 'AVAILABLE'
---   END AS enrollment_status
--- FROM courses AS c
--- LEFT JOIN enrollments AS e ON e.course_id = c.id
--- GROUP BY c.id, c.name, c.category, c.instructor, c.capacity
--- ORDER BY c.id;

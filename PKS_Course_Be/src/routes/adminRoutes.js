@@ -14,6 +14,8 @@ const courseFields = [
   body('category').isString().trim().isLength({ min: 2, max: 100 }),
   body('description').optional({ nullable: true }).isString(),
   body('instructor').isString().trim().isLength({ min: 2, max: 120 }),
+  body('fee').isFloat({ min: 0 }).toFloat(),
+  body('isHidden').optional().isBoolean().toBoolean(),
   body('capacity').isInt({ min: 1 }).toInt(),
 ];
 
@@ -31,7 +33,7 @@ router.get('/courses', [
   query('search').optional().isString().trim().isLength({ max: 100 }),
   query('category').optional().isString().trim().isLength({ max: 100 }),
 ], validate, asyncHandler(async (req, res) => {
-  const data = await courseService.list(req.query);
+  const data = await courseService.list({ ...req.query, includeHidden: true });
   res.json({ success: true, data });
 }));
 
@@ -48,6 +50,14 @@ router.put('/courses/:courseId', courseId, courseFields, validate, asyncHandler(
 router.delete('/courses/:courseId', courseId, validate, asyncHandler(async (req, res) => {
   const data = await courseService.remove(req.params.courseId);
   res.json({ success: true, data: { deleted: data } });
+}));
+
+router.patch('/courses/:courseId/visibility', [
+  courseId,
+  body('isHidden').isBoolean().toBoolean(),
+], validate, asyncHandler(async (req, res) => {
+  const data = await courseService.setVisibility(req.params.courseId, req.body.isHidden);
+  res.json({ success: true, data });
 }));
 
 router.get('/courses/:courseId/students', courseId, validate, asyncHandler(async (req, res) => {

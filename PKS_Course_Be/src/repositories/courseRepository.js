@@ -1,7 +1,7 @@
 const pool = require('../config/database');
 
 const courseSelect = `
-  SELECT c.id, c.name, c.category, c.description, c.instructor, c.capacity,
+  SELECT c.id, c.name, c.category, c.description, c.instructor, c.fee, c.is_hidden, c.capacity,
          COUNT(e.id) AS enrolled_count,
          CASE WHEN COUNT(e.id) >= c.capacity THEN 'FULL' ELSE 'AVAILABLE' END AS enrollment_status,
          c.created_at, c.updated_at
@@ -10,12 +10,13 @@ const courseSelect = `
 `;
 
 function courseGroupBy() {
-  return ' GROUP BY c.id, c.name, c.category, c.description, c.instructor, c.capacity, c.created_at, c.updated_at';
+  return ' GROUP BY c.id, c.name, c.category, c.description, c.instructor, c.fee, c.is_hidden, c.capacity, c.created_at, c.updated_at';
 }
 
 async function list(filters = {}) {
   const values = [];
   const conditions = [];
+  if (!filters.includeHidden) conditions.push('c.is_hidden = FALSE');
   if (filters.search) {
     conditions.push('(c.name LIKE ? OR c.instructor LIKE ?)');
     values.push(`%${filters.search}%`, `%${filters.search}%`);
@@ -47,16 +48,16 @@ async function findForUpdate(id, connection) {
 
 async function create(data) {
   const [result] = await pool.query(
-    'INSERT INTO courses (name, category, description, instructor, capacity) VALUES (?, ?, ?, ?, ?)',
-    [data.name, data.category, data.description || null, data.instructor, data.capacity],
+    'INSERT INTO courses (name, category, description, instructor, fee, is_hidden, capacity) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    [data.name, data.category, data.description || null, data.instructor, data.fee, Boolean(data.isHidden), data.capacity],
   );
   return findById(result.insertId);
 }
 
 async function update(id, data, connection = pool) {
   const [result] = await connection.query(
-    'UPDATE courses SET name = ?, category = ?, description = ?, instructor = ?, capacity = ? WHERE id = ?',
-    [data.name, data.category, data.description || null, data.instructor, data.capacity, id],
+    'UPDATE courses SET name = ?, category = ?, description = ?, instructor = ?, fee = ?, is_hidden = ?, capacity = ? WHERE id = ?',
+    [data.name, data.category, data.description || null, data.instructor, data.fee, Boolean(data.isHidden), data.capacity, id],
   );
   return result.affectedRows ? findById(id, connection) : null;
 }
@@ -64,6 +65,11 @@ async function update(id, data, connection = pool) {
 async function remove(id) {
   const [result] = await pool.query('DELETE FROM courses WHERE id = ?', [id]);
   return result.affectedRows > 0;
+}
+
+async function updateVisibility(id, isHidden) {
+  const [result] = await pool.query('UPDATE courses SET is_hidden = ? WHERE id = ?', [Boolean(isHidden), id]);
+  return result.affectedRows ? findById(id) : null;
 }
 
 async function countEnrollments(courseId, connection = pool) {
@@ -90,6 +96,7 @@ module.exports = {
   findForUpdate,
   create,
   update,
+  updateVisibility,
   remove,
   countEnrollments,
   listStudents,

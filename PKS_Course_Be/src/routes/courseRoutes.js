@@ -16,14 +16,19 @@ router.get('/', [
   res.json({ success: true, data });
 }));
 
+router.get('/:courseId', courseId, validate, asyncHandler(async (req, res) => {
+  const data = await courseService.detail(req.params.courseId);
+  res.json({ success: true, data });
+}));
+
 router.post('/:courseId/enroll', requireAuth, requireRole('STUDENT'), courseId, validate, asyncHandler(async (req, res) => {
   const data = await courseService.enroll(req.user.userId, req.params.courseId);
   res.status(201).json({ success: true, data });
 }));
 
-router.delete('/:courseId/enroll', requireAuth, requireRole('STUDENT'), courseId, validate, asyncHandler(async (req, res) => {
-  const data = await courseService.unenroll(req.user.userId, req.params.courseId);
-  res.json({ success: true, data });
-}));
+// router.delete('/:courseId/enroll', requireAuth, requireRole('STUDENT'), courseId, validate, asyncHandler(async (req, res) => {
+//   const data = await courseService.unenroll(req.user.userId, req.params.courseId);
+//   res.json({ success: true, data });
+// }));
 
 module.exports = router;
