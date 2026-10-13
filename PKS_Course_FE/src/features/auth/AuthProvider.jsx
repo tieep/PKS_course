@@ -7,17 +7,26 @@ export default function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    apiRequest('/auth/me').then(setUser).catch(() => setUser(null)).finally(() => setLoading(false))
+    apiRequest('/auth/me')
+      .then(setUser)
+      .catch(() => setUser(null))
+      .finally(() => setLoading(false))
   }, [])
 
   async function login(email, password) {
-    const result = await apiRequest('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) })
+    const result = await apiRequest('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    })
     setUser(result.user)
     return result.user
   }
 
   async function register(fullName, email, password) {
-    const result = await apiRequest('/auth/register', { method: 'POST', body: JSON.stringify({ fullName, email, password }) })
+    const result = await apiRequest('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify({ fullName, email, password }),
+    })
     setUser(result.user)
     return result.user
   }
@@ -27,5 +36,9 @@ export default function AuthProvider({ children }) {
     setUser(null)
   }
 
-  return <AuthContext.Provider value={{ user, loading, login, register, logout }}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+      {children}
+    </AuthContext.Provider>
+  )
 }

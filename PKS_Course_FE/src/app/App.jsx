@@ -10,5 +10,44 @@ import MyCoursesPage from '../features/courses/pages/MyCoursesPage'
 import CourseDetailPage from '../features/courses/pages/CourseDetailPage'
 
 export default function App() {
-  return <AuthProvider><BrowserRouter><Toaster position="top-right" toastOptions={{ duration: 3200 }} /><AppLayout><Routes><Route path="/" element={<Navigate to="/courses" replace />} /><Route path="/login" element={<AuthPage />} /><Route path="/register" element={<AuthPage mode="register" />} /><Route path="/courses" element={<CoursesPage />} /><Route path="/courses/:courseId" element={<CourseDetailPage />} /><Route path="/my-courses" element={<ProtectedRoute><MyCoursesPage /></ProtectedRoute>} /><Route path="/admin" element={<ProtectedRoute adminOnly><AdminPage /></ProtectedRoute>} /><Route path="*" element={<Navigate to="/courses" replace />} /></Routes></AppLayout></BrowserRouter></AuthProvider>
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <Toaster position="top-right" toastOptions={{ duration: 3200 }} />
+        <AppLayout>
+          <Routes>
+            {/* Public routes */}
+            <Route path="/" element={<Navigate to="/courses" replace />} />
+            <Route path="/login" element={<AuthPage />} />
+            <Route path="/register" element={<AuthPage mode="register" />} />
+            <Route path="/courses" element={<CoursesPage />} />
+            <Route path="/courses/:courseId" element={<CourseDetailPage />} />
+
+            {/* Protected Student routes */}
+            <Route
+              path="/my-courses"
+              element={
+                <ProtectedRoute>
+                  <MyCoursesPage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Protected Admin routes */}
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute adminOnly>
+                  <AdminPage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Fallback */}
+            <Route path="*" element={<Navigate to="/courses" replace />} />
+          </Routes>
+        </AppLayout>
+      </BrowserRouter>
+    </AuthProvider>
+  )
 }
