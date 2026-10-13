@@ -21,7 +21,7 @@ export default function AppLayout({ children }) {
     <div className="min-h-screen overflow-hidden bg-linear-to-b from-gray-700 to-gray-800 text-slate-100">
       <header className="sticky top-0 z-20 border-b border-slate-300/15 bg-gray-900/70 shadow-lg shadow-slate-950/15 backdrop-blur-xl">
         <div className="mx-auto flex min-h-20 max-w-7xl items-center gap-5 px-5 md:px-10">
-          <Link className="flex items-center gap-3" to="/courses">
+          <Link className="flex items-center gap-3" to={user?.role === 'ADMIN' ? '/admin' : '/courses'}>
             <span className="grid size-10 rotate-3 place-items-center rounded-xl bg-linear-to-r from-blue-500 to-purple-600 font-['Space_Grotesk'] text-sm font-bold text-white shadow-lg shadow-purple-500/30">
               PK
             </span>
@@ -30,7 +30,7 @@ export default function AppLayout({ children }) {
             </span>
           </Link>
 
-          {user && (
+          {user && user.role !== 'ADMIN' && (
             <nav className="ml-10 flex items-center gap-1 rounded-full border border-white/10 bg-white/10 p-1 shadow-inner shadow-slate-950/20">
               <NavLink className={navClass} to="/courses">
                 Explore
@@ -38,11 +38,6 @@ export default function AppLayout({ children }) {
               {user.role === 'STUDENT' && (
                 <NavLink className={navClass} to="/my-courses">
                   My courses
-                </NavLink>
-              )}
-              {user.role === 'ADMIN' && (
-                <NavLink className={navClass} to="/admin">
-                  Admin desk
                 </NavLink>
               )}
             </nav>
