@@ -13,11 +13,13 @@ export default function AuthProvider({ children }) {
   async function login(email, password) {
     const result = await apiRequest('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) })
     setUser(result.user)
+    return result.user
   }
 
   async function register(fullName, email, password) {
     const result = await apiRequest('/auth/register', { method: 'POST', body: JSON.stringify({ fullName, email, password }) })
     setUser(result.user)
+    return result.user
   }
 
   async function logout() {
