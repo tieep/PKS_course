@@ -1,0 +1,2125 @@
+{
+	"info": {
+		"_postman_id": "8196955d-0cf3-4bbf-9b97-9332ba56d9f7",
+		"name": "PKS_course",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40072528"
+	},
+	"item": [
+		{
+			"name": "/api/health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"health"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"health"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "62"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"3e-0dNmt616u0dFc1RgVEyiICGlcGg\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 02:51:13 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": {\n        \"status\": \"ok\",\n        \"database\": \"connected\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "/api/auth/register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"fullName\": \"Noname 1111\",\r\n  \"email\": \"tiepte@gmail.com\",\r\n  \"password\": \"123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"fullName\": \"Noname 1111\",\r\n  \"email\": \"tiepte@gmail.com\",\r\n  \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Set-Cookie",
+							"value": "access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsInJvbGUiOiJTVFVERU5UIiwiaWF0IjoxNzkxODYwMDc2LCJleHAiOjE3OTE4NjcyNzZ9.S8oxIdFYTa98a4eKAPzZ-pZJwZDcvAlwHPWmFF65mww; Max-Age=7200; Path=/; Expires=Tue, 13 Oct 2026 04:54:36 GMT; HttpOnly; SameSite=Lax"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "151"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"97-qtzI/GNdoLP7MtCVBJKvvVCOn48\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 02:54:36 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": {\n        \"user\": {\n            \"id\": 6,\n            \"full_name\": \"Noname 1111\",\n            \"email\": \"tiepte@gmail.com\",\n            \"role\": \"STUDENT\",\n            \"created_at\": \"2026-10-13T02:54:36.000Z\"\n        }\n    }\n}"
+				},
+				{
+					"name": "duplicate email",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"fullName\": \"Noname 1111\",\r\n  \"email\": \"tiepte@gmail.com\",\r\n  \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"status": "Conflict",
+					"code": 409,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "57"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"39-NuJAyy6EN9rHZmAh9tt/X/YYx2o\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 02:55:14 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": false,\n    \"message\": \"Email is already registered\"\n}"
+				},
+				{
+					"name": "null value",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"fullName\": \"\",\r\n  \"email\": \"\",\r\n  \"password\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"status": "Unprocessable Entity",
+					"code": 422,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "314"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"13a-Nke5Uo9Tke4eBfRqJH3vKva68qI\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 05:18:10 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": false,\n    \"message\": \"Validation failed\",\n    \"details\": [\n        {\n            \"type\": \"field\",\n            \"value\": \"\",\n            \"msg\": \"Invalid value\",\n            \"path\": \"fullName\",\n            \"location\": \"body\"\n        },\n        {\n            \"type\": \"field\",\n            \"value\": \"\",\n            \"msg\": \"Invalid value\",\n            \"path\": \"email\",\n            \"location\": \"body\"\n        },\n        {\n            \"type\": \"field\",\n            \"value\": \"\",\n            \"msg\": \"Invalid value\",\n            \"path\": \"password\",\n            \"location\": \"body\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "/api/auth/login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"tiepte@gmail.com\",\r\n  \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"tiepte@gmail.com\",\r\n  \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Set-Cookie",
+							"value": "access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsInJvbGUiOiJTVFVERU5UIiwiaWF0IjoxNzkxODYwNTMxLCJleHAiOjE3OTE4Njc3MzF9.QcTQSD26ggejlot4YEiJ-ynHS2ddpJzVuFyrqdjOt4U; Max-Age=7200; Path=/; Expires=Tue, 13 Oct 2026 05:02:11 GMT; HttpOnly; SameSite=Lax"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "151"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"97-qtzI/GNdoLP7MtCVBJKvvVCOn48\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 03:02:11 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": {\n        \"user\": {\n            \"id\": 6,\n            \"full_name\": \"Noname 1111\",\n            \"email\": \"tiepte@gmail.com\",\n            \"role\": \"STUDENT\",\n            \"created_at\": \"2026-10-13T02:54:36.000Z\"\n        }\n    }\n}"
+				},
+				{
+					"name": "wrong_password",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"tiepte@gmail.com\",\r\n  \"password\": \"123456111\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "55"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"37-5uDpJTljPBecOPs/j7OXFdPRcmQ\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 03:04:49 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": false,\n    \"message\": \"Invalid email or password\"\n}"
+				}
+			]
+		},
+		{
+			"name": "/api/auth/me",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"tiepte@gmail.com\",\r\n  \"password\": \"123456\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/auth/me",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"auth",
+						"me"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"tiepte@gmail.com\",\r\n  \"password\": \"123456\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/me",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"me"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "142"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"8e-accyWYH4IJlOX5lCsHxW0WtndO4\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 03:10:16 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": {\n        \"id\": 6,\n        \"full_name\": \"Noname 1111\",\n        \"email\": \"tiepte@gmail.com\",\n        \"role\": \"STUDENT\",\n        \"created_at\": \"2026-10-13T02:54:36.000Z\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "/api/courses",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"tiepte@gmail.com\",\r\n  \"password\": \"123456\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/courses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"courses"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "all course",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"tiepte@gmail.com\",\r\n  \"password\": \"123456\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/courses",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"courses"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1707"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"6ab-57tmYPzceMJ2RBfAdsDdzjyEqZQ\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 03:10:57 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"React Fundamentals\",\n            \"category\": \"Frontend\",\n            \"description\": \"Xây dựng giao diện React từ component, state đến form.\",\n            \"instructor\": \"Le Minh Hoang\",\n            \"fee\": \"2500000.00\",\n            \"is_hidden\": 0,\n            \"capacity\": 30,\n            \"enrolled_count\": 3,\n            \"enrollment_status\": \"AVAILABLE\",\n            \"created_at\": \"2026-10-11T12:46:51.000Z\",\n            \"updated_at\": \"2026-10-13T01:58:14.000Z\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Express.js REST API\",\n            \"category\": \"Backend\",\n            \"description\": \"Thiết kế REST API với Express.js, middleware và MySQL.\",\n            \"instructor\": \"Pham Quoc Tuan\",\n            \"fee\": \"2200000.00\",\n            \"is_hidden\": 0,\n            \"capacity\": 25,\n            \"enrolled_count\": 3,\n            \"enrollment_status\": \"AVAILABLE\",\n            \"created_at\": \"2026-10-11T12:46:51.000Z\",\n            \"updated_at\": \"2026-10-11T12:46:51.000Z\"\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Fullstack Web Development\",\n            \"category\": \"Fullstack\",\n            \"description\": \"Kết nối React với Express.js để xây dựng ứng dụng hoàn chỉnh.\",\n            \"instructor\": \"Nguyen Thanh Son\",\n            \"fee\": \"4500000.00\",\n            \"is_hidden\": 0,\n            \"capacity\": 20,\n            \"enrolled_count\": 1,\n            \"enrollment_status\": \"AVAILABLE\",\n            \"created_at\": \"2026-10-11T12:46:51.000Z\",\n            \"updated_at\": \"2026-10-11T12:46:51.000Z\"\n        },\n        {\n            \"id\": 4,\n            \"name\": \"Database Design with MySQL\",\n            \"category\": \"Database\",\n            \"description\": \"Thiết kế schema, quan hệ, index và transaction trong MySQL.\",\n            \"instructor\": \"Vo Ngoc Mai\",\n            \"fee\": \"1800000.00\",\n            \"is_hidden\": 0,\n            \"capacity\": 1,\n            \"enrolled_count\": 1,\n            \"enrollment_status\": \"FULL\",\n            \"created_at\": \"2026-10-11T12:46:51.000Z\",\n            \"updated_at\": \"2026-10-13T02:24:52.000Z\"\n        },\n        {\n            \"id\": 5,\n            \"name\": \"ffffffff\",\n            \"category\": \"test\",\n            \"description\": \"aaaaaaa\",\n            \"instructor\": \"aaaaaaaaaa\",\n            \"fee\": \"0.00\",\n            \"is_hidden\": 0,\n            \"capacity\": 20,\n            \"enrolled_count\": 0,\n            \"enrollment_status\": \"AVAILABLE\",\n            \"created_at\": \"2026-10-13T02:20:58.000Z\",\n            \"updated_at\": \"2026-10-13T02:20:58.000Z\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "/api/courses?search=React",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"tiepte@gmail.com\",\r\n  \"password\": \"123456\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/courses?search=React",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"courses"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "React"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "372"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"174-FZz8/7D00Zf2CJXMkG0ObaU4Ibg\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 03:12:38 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"React Fundamentals\",\n            \"category\": \"Frontend\",\n            \"description\": \"Xây dựng giao diện React từ component, state đến form.\",\n            \"instructor\": \"Le Minh Hoang\",\n            \"fee\": \"2500000.00\",\n            \"is_hidden\": 0,\n            \"capacity\": 30,\n            \"enrolled_count\": 3,\n            \"enrollment_status\": \"AVAILABLE\",\n            \"created_at\": \"2026-10-11T12:46:51.000Z\",\n            \"updated_at\": \"2026-10-13T01:58:14.000Z\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "/api/courses?category=Backend",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"tiepte@gmail.com\",\r\n  \"password\": \"123456\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/courses?category=Backend",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"courses"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "Backend"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "370"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"172-W03SSqN4xm9jbTFNqs+xf3XVavg\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 03:13:43 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": [\n        {\n            \"id\": 2,\n            \"name\": \"Express.js REST API\",\n            \"category\": \"Backend\",\n            \"description\": \"Thiết kế REST API với Express.js, middleware và MySQL.\",\n            \"instructor\": \"Pham Quoc Tuan\",\n            \"fee\": \"2200000.00\",\n            \"is_hidden\": 0,\n            \"capacity\": 25,\n            \"enrolled_count\": 3,\n            \"enrollment_status\": \"AVAILABLE\",\n            \"created_at\": \"2026-10-11T12:46:51.000Z\",\n            \"updated_at\": \"2026-10-11T12:46:51.000Z\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "/api/courses?search=course&category=Backend",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"tiepte@gmail.com\",\r\n  \"password\": \"123456\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/courses?search=course&category=Backend",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"courses"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "course"
+								},
+								{
+									"key": "category",
+									"value": "Backend"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "26"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1a-s3B6blipWxCo2IriQlJeaz0uh7I\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 03:15:15 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": []\n}"
+				},
+				{
+					"name": "course_detail",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"tiepte@gmail.com\",\r\n  \"password\": \"123456\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/courses/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"courses",
+								"2"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "368"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"170-c59Jtk0qnRrWc3EcNKKSIz2Uf3I\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 04:13:29 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": {\n        \"id\": 2,\n        \"name\": \"Express.js REST API\",\n        \"category\": \"Backend\",\n        \"description\": \"Thiết kế REST API với Express.js, middleware và MySQL.\",\n        \"instructor\": \"Pham Quoc Tuan\",\n        \"fee\": \"2200000.00\",\n        \"is_hidden\": 0,\n        \"capacity\": 25,\n        \"enrolled_count\": 4,\n        \"enrollment_status\": \"AVAILABLE\",\n        \"created_at\": \"2026-10-11T12:46:51.000Z\",\n        \"updated_at\": \"2026-10-11T12:46:51.000Z\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "/api/courses/1/enroll",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/courses/1/enroll",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"courses",
+						"1",
+						"enroll"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/courses/1/enroll",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"courses",
+								"1",
+								"enroll"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "370"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"172-5b+WubnhvXCuYqHmPTsfqxLZYKo\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 03:16:06 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"React Fundamentals\",\n        \"category\": \"Frontend\",\n        \"description\": \"Xây dựng giao diện React từ component, state đến form.\",\n        \"instructor\": \"Le Minh Hoang\",\n        \"fee\": \"2500000.00\",\n        \"is_hidden\": 0,\n        \"capacity\": 30,\n        \"enrolled_count\": 4,\n        \"enrollment_status\": \"AVAILABLE\",\n        \"created_at\": \"2026-10-11T12:46:51.000Z\",\n        \"updated_at\": \"2026-10-13T01:58:14.000Z\"\n    }\n}"
+				},
+				{
+					"name": "enrolled",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/courses/1/enroll",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"courses",
+								"1",
+								"enroll"
+							]
+						}
+					},
+					"status": "Conflict",
+					"code": 409,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "69"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"45-JMsKrWtJ3m/JF0gXh5TLzZtio1Y\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 03:16:47 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": false,\n    \"message\": \"You are already enrolled in this course\"\n}"
+				},
+				{
+					"name": "course_full",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/courses/4/enroll",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"courses",
+								"4",
+								"enroll"
+							]
+						}
+					},
+					"status": "Conflict",
+					"code": 409,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "44"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"2c-e1mRDubC+lMyUgrH+Hs4tEqlN3s\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 03:19:42 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": false,\n    \"message\": \"Course is full\"\n}"
+				}
+			]
+		},
+		{
+			"name": "/api/me/enrollments",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"tiepte@gmail.com\",\r\n  \"password\": \"123456\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/me/enrollments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"me",
+						"enrollments"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "enrolled course",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"tiepte@gmail.com\",\r\n  \"password\": \"123456\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/me/enrollments",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"me",
+								"enrollments"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "549"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"225-58iK5xvLQrtr+P9Jh57clnquoNE\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 03:28:40 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": [\n        {\n            \"id\": 2,\n            \"name\": \"Express.js REST API\",\n            \"category\": \"Backend\",\n            \"description\": \"Thiết kế REST API với Express.js, middleware và MySQL.\",\n            \"instructor\": \"Pham Quoc Tuan\",\n            \"fee\": \"2200000.00\",\n            \"capacity\": 25,\n            \"enrolled_at\": \"2026-10-13T03:28:35.000Z\",\n            \"status\": \"ENROLLED\"\n        },\n        {\n            \"id\": 1,\n            \"name\": \"React Fundamentals\",\n            \"category\": \"Frontend\",\n            \"description\": \"Xây dựng giao diện React từ component, state đến form.\",\n            \"instructor\": \"Le Minh Hoang\",\n            \"fee\": \"2500000.00\",\n            \"capacity\": 30,\n            \"enrolled_at\": \"2026-10-13T03:16:06.000Z\",\n            \"status\": \"ENROLLED\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "/api/admin/courses",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Node.js Advanced\",\r\n  \"category\": \"Backend\",\r\n  \"description\": \"Advanced Express.js and MySQL course\",\r\n  \"instructor\": \"Admin Demo\",\r\n  \"fee\": 300000,\r\n  \"isHidden\": false,\r\n  \"capacity\": 20\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/admin/courses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"admin",
+						"courses"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "invalid role",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Node.js Advanced\",\r\n  \"category\": \"Backend\",\r\n  \"description\": \"Advanced Express.js and MySQL course\",\r\n  \"instructor\": \"Admin Demo\",\r\n  \"fee\": 300000,\r\n  \"isHidden\": false,\r\n  \"capacity\": 20\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/admin/courses",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"admin",
+								"courses"
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "74"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"4a-lV0aPKNBgXiHE9UvXRQnduP4BWI\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 03:40:13 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": false,\n    \"message\": \"You do not have permission for this resource\"\n}"
+				},
+				{
+					"name": "success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Node.js Advanced\",\r\n  \"category\": \"Backend\",\r\n  \"description\": \"Advanced Express.js and MySQL course\",\r\n  \"instructor\": \"Admin Demo\",\r\n  \"fee\": 300000,\r\n  \"isHidden\": false,\r\n  \"capacity\": 20\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/admin/courses",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"admin",
+								"courses"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "335"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"14f-q4M3LmbqYx3bkhN3BRWKYzarM1w\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 03:41:02 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": {\n        \"id\": 7,\n        \"name\": \"Node.js Advanced\",\n        \"category\": \"Backend\",\n        \"description\": \"Advanced Express.js and MySQL course\",\n        \"instructor\": \"Admin Demo\",\n        \"fee\": \"300000.00\",\n        \"is_hidden\": 0,\n        \"capacity\": 20,\n        \"enrolled_count\": 0,\n        \"enrollment_status\": \"AVAILABLE\",\n        \"created_at\": \"2026-10-13T03:41:02.000Z\",\n        \"updated_at\": \"2026-10-13T03:41:02.000Z\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "/api/admin/courses/1",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"React Fundamentals Updated\",\r\n  \"category\": \"Frontend\",\r\n  \"description\": \"Updated React course description\",\r\n  \"instructor\": \"Le Minh Hoang\",\r\n  \"capacity\": 30\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/admin/courses/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"admin",
+						"courses",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "success",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"React Fundamentals\",\r\n    \"category\": \"Frontend\",\r\n    \"description\": \"Xây dựng giao diện React từ component, state đến form.\",\r\n    \"instructor\": \"Nguyen Khac Tiep\",\r\n    \"fee\": \"2500000.00\",\r\n    \"is_hidden\": 0,\r\n    \"capacity\": 20,\r\n    \"enrolled_count\": 4,\r\n    \"enrollment_status\": \"AVAILABLE\",\r\n    \"created_at\": \"2026-10-11T12:46:51.000Z\",\r\n    \"updated_at\": \"2026-10-13T03:46:12.000Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/admin/courses/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"admin",
+								"courses",
+								"1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "373"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"175-CnikfGh1gJoE2aGYxnLw/ID0WsM\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 03:51:30 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"React Fundamentals\",\n        \"category\": \"Frontend\",\n        \"description\": \"Xây dựng giao diện React từ component, state đến form.\",\n        \"instructor\": \"Nguyen Khac Tiep\",\n        \"fee\": \"2500000.00\",\n        \"is_hidden\": 0,\n        \"capacity\": 20,\n        \"enrolled_count\": 4,\n        \"enrollment_status\": \"AVAILABLE\",\n        \"created_at\": \"2026-10-11T12:46:51.000Z\",\n        \"updated_at\": \"2026-10-13T03:46:12.000Z\"\n    }\n}"
+				},
+				{
+					"name": "capacity lower than enrolled students",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"React Fundamentals\",\r\n    \"category\": \"Frontend\",\r\n    \"description\": \"Xây dựng giao diện React từ component, state đến form.\",\r\n    \"instructor\": \"Nguyen Khac Tiep\",\r\n    \"fee\": \"2500000.00\",\r\n    \"is_hidden\": 0,\r\n    \"capacity\": 1,\r\n    \"enrolled_count\": 4,\r\n    \"enrollment_status\": \"AVAILABLE\",\r\n    \"created_at\": \"2026-10-11T12:46:51.000Z\",\r\n    \"updated_at\": \"2026-10-13T03:46:12.000Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/admin/courses/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"admin",
+								"courses",
+								"1"
+							]
+						}
+					},
+					"status": "Conflict",
+					"code": 409,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "79"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"4f-LNwpA7jA+Z2Necgtw1wl1FqUGek\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 03:52:16 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": false,\n    \"message\": \"Capacity cannot be lower than 4 enrolled students\"\n}"
+				}
+			]
+		},
+		{
+			"name": "/api/admin/courses/1}/students",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"React Fundamentals Updated\",\r\n  \"category\": \"Frontend\",\r\n  \"description\": \"Updated React course description\",\r\n  \"instructor\": \"Le Minh Hoang\",\r\n  \"capacity\": 30\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/admin/courses/1/students",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"admin",
+						"courses",
+						"1",
+						"students"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "enrolled students",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"React Fundamentals Updated\",\r\n  \"category\": \"Frontend\",\r\n  \"description\": \"Updated React course description\",\r\n  \"instructor\": \"Le Minh Hoang\",\r\n  \"capacity\": 30\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/admin/courses/1/students",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"admin",
+								"courses",
+								"1",
+								"students"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "670"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"29e-RDAF9pyw69rq4QOFTbOKJjeE9IM\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 03:57:56 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": [\n        {\n            \"id\": 6,\n            \"full_name\": \"Noname 1111\",\n            \"email\": \"tiepte@gmail.com\",\n            \"course_name\": \"React Fundamentals\",\n            \"enrolled_at\": \"2026-10-13T03:16:06.000Z\",\n            \"status\": \"ENROLLED\"\n        },\n        {\n            \"id\": 5,\n            \"full_name\": \"qqqqqqqqq\",\n            \"email\": \"testing@example.com\",\n            \"course_name\": \"React Fundamentals\",\n            \"enrolled_at\": \"2026-10-13T01:55:02.000Z\",\n            \"status\": \"ENROLLED\"\n        },\n        {\n            \"id\": 4,\n            \"full_name\": \"nguyen van an\",\n            \"email\": \"duy@example.com\",\n            \"course_name\": \"React Fundamentals\",\n            \"enrolled_at\": \"2026-10-11T12:55:20.000Z\",\n            \"status\": \"ENROLLED\"\n        },\n        {\n            \"id\": 2,\n            \"full_name\": \"Nguyen Van An\",\n            \"email\": \"student1@pks-course.local\",\n            \"course_name\": \"React Fundamentals\",\n            \"enrolled_at\": \"2026-10-11T12:46:51.000Z\",\n            \"status\": \"ENROLLED\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "/api/admin/courses/1",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"React Fundamentals Updated\",\r\n  \"category\": \"Frontend\",\r\n  \"description\": \"Updated React course description\",\r\n  \"instructor\": \"Le Minh Hoang\",\r\n  \"capacity\": 30\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/admin/courses/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"admin",
+						"courses",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "enrolled course",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"React Fundamentals Updated\",\r\n  \"category\": \"Frontend\",\r\n  \"description\": \"Updated React course description\",\r\n  \"instructor\": \"Le Minh Hoang\",\r\n  \"capacity\": 30\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/admin/courses/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"admin",
+								"courses",
+								"1"
+							]
+						}
+					},
+					"status": "Conflict",
+					"code": 409,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "75"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"4b-El4vCkwa8rz2mhY2EPW12Ha7Qr8\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 04:06:18 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": false,\n    \"message\": \"Cannot delete a course with enrolled students\"\n}"
+				},
+				{
+					"name": "success",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"React Fundamentals Updated\",\r\n  \"category\": \"Frontend\",\r\n  \"description\": \"Updated React course description\",\r\n  \"instructor\": \"Le Minh Hoang\",\r\n  \"capacity\": 30\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/admin/courses/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"admin",
+								"courses",
+								"7"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "40"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"28-vy5x+M3fa/b+oBZbQhAr31CbSpA\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 04:07:09 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": {\n        \"deleted\": true\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "/api/admin/courses/1/visibility",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"courseId\": 1,\r\n    \"isHidden\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/admin/courses/1/visibility",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"admin",
+						"courses",
+						"1",
+						"visibility"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"courseId\": 1,\r\n    \"isHidden\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/admin/courses/1/visibility",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"admin",
+								"courses",
+								"1",
+								"visibility"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:5173"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "373"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"175-OBAqJ7uyC5tPILWNwy4K1e4B7z4\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Oct 2026 04:10:03 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"React Fundamentals\",\n        \"category\": \"Frontend\",\n        \"description\": \"Xây dựng giao diện React từ component, state đến form.\",\n        \"instructor\": \"Nguyen Khac Tiep\",\n        \"fee\": \"2500000.00\",\n        \"is_hidden\": 1,\n        \"capacity\": 20,\n        \"enrolled_count\": 4,\n        \"enrollment_status\": \"AVAILABLE\",\n        \"created_at\": \"2026-10-11T12:46:51.000Z\",\n        \"updated_at\": \"2026-10-13T04:10:03.000Z\"\n    }\n}"
+				}
+			]
+		}
+	]
+}
