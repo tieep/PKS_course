@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
 import { apiRequest } from '../../../lib/api'
+import { formatDate, formatFee } from '../../../lib/formatters'
 
 const emptyCourse = {
   name: '',
@@ -21,6 +22,11 @@ export default function AdminPage() {
   const [courseToDelete, setCourseToDelete] = useState(null)
   const [formOpen, setFormOpen] = useState(false)
   const [loading, setLoading] = useState(true)
+
+  // Filters
+  const [searchTerm, setSearchTerm] = useState('')
+  const [categoryFilter, setCategoryFilter] = useState('all')
+  const [visibilityFilter, setVisibilityFilter] = useState('all')
 
   async function loadCourses() {
     setLoading(true)
@@ -81,14 +87,11 @@ export default function AdminPage() {
     const isEditing = Boolean(form.id)
 
     try {
-      await apiRequest(
-        isEditing ? `/admin/courses/${form.id}` : '/admin/courses',
-        {
-          method: isEditing ? 'PUT' : 'POST',
-          body: JSON.stringify(form),
-        },
-      )
-      toast.success(isEditing ? 'Course updated.' : 'Course created.')
+      await apiRequest(isEditing ? `/admin/courses/${form.id}` : '/admin/courses', {
+        method: isEditing ? 'PUT' : 'POST',
+        body: JSON.stringify(form),
+      })
+      toast.success(isEditing ? 'Course updated successfully.' : 'Course created successfully.')
       closeForm()
       await loadCourses()
     } catch (error) {
@@ -112,7 +115,7 @@ export default function AdminPage() {
   async function deleteCourse(courseId) {
     try {
       await apiRequest(`/admin/courses/${courseId}`, { method: 'DELETE' })
-      toast.success('Course deleted.')
+      toast.success('Course deleted successfully.')
       await loadCourses()
     } catch (error) {
       toast.error(error.message)
@@ -131,40 +134,406 @@ export default function AdminPage() {
     }
   }
 
+  // Filtered course calculations
+  const totalCourses = courses.length
+  const visibleCourses = courses.filter((c) => !c.is_hidden).length
+  const hiddenCourses = courses.filter((c) => c.is_hidden).length
+  const totalEnrolled = courses.reduce((sum, c) => sum + (c.enrolled_count || 0), 0)
+  const totalCapacity = courses.reduce((sum, c) => sum + (c.capacity || 0), 0)
+  const overallOccupancy = totalCapacity > 0 ? Math.round((totalEnrolled / totalCapacity) * 100) : 0
+
+  const filteredCourses = courses.filter((c) => {
+    const matchesSearch =
+      searchTerm === '' ||
+      c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.instructor.toLowerCase().includes(searchTerm.toLowerCase())
+
+    const matchesCategory = categoryFilter === 'all' || c.category === categoryFilter
+
+    const matchesVisibility =
+      visibilityFilter === 'all' ||
+      (visibilityFilter === 'visible' && !c.is_hidden) ||
+      (visibilityFilter === 'hidden' && c.is_hidden)
+
+    return matchesSearch && matchesCategory && matchesVisibility
+  })
+
   return (
-    <>
-      <header className="mb-7 flex flex-col justify-between gap-6 rounded-3xl border border-white/10 bg-slate-950/15 p-7 shadow-lg shadow-slate-950/10 md:flex-row md:items-end">
+    <div className="flex flex-col gap-8">
+      {/* Admin Header */}
+      <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-white/[0.08]">
         <div>
-          <p className="mb-3 text-[11px] font-bold tracking-[2px] text-blue-200">ADMIN WORKSPACE</p>
-          <h1 className="font-['Space_Grotesk'] text-4xl font-semibold tracking-[-1.5px] text-white md:text-5xl">
-            Course management
+          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#06b6d4] mb-2">
+            <span className="material-symbols-outlined text-[16px]">admin_panel_settings</span>
+            <span>Administrative Console</span>
+          </div>
+          <h1 className="font-['Plus_Jakarta_Sans'] text-3xl sm:text-4xl font-bold text-white tracking-tight">
+            Course Management
           </h1>
-          <p className="mt-3 max-w-2xl text-base leading-relaxed text-slate-300">
-            Manage the catalog, enrollment capacity, visibility and student records.
+          <p className="text-slate-400 text-sm mt-1">
+            Configure catalog offerings, capacity limits, visibility states, and review enrolled cohorts.
           </p>
         </div>
+
         <button
-          className="inline-flex items-center justify-center rounded-xl bg-linear-to-r from-blue-500 to-purple-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-purple-950/30 transition hover:from-blue-600 hover:to-purple-700"
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#4f46e5] hover:bg-[#6366f1] px-5 py-2.5 text-xs font-bold text-white shadow-[0_0_16px_rgba(79,70,229,0.35)] transition-all shrink-0"
           onClick={openCreate}
         >
-          + Create course
+          <span className="material-symbols-outlined text-[18px]">add</span>
+          <span>Create New Course</span>
         </button>
       </header>
 
-      <div className="grid items-stretch gap-6 xl:grid-cols-[250px_minmax(0,1fr)]">
-        <AdminSidebar courseCount={courses.length} />
-        <section className="min-w-0">
-          <CourseTable
-            courses={courses}
-            loading={loading}
-            onEdit={openEdit}
-            onDelete={setCourseToDelete}
-            onStudents={openStudents}
-            onToggleVisibility={toggleVisibility}
-          />
-        </section>
+      {/* KPI Metric Cards Strip */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Metric 1: Total Courses */}
+        <div className="p-5 rounded-2xl bg-[#151b2c] border border-white/[0.08] flex flex-col justify-between shadow-lg">
+          <div className="flex items-center justify-between text-slate-400">
+            <span className="text-xs font-semibold uppercase tracking-wider">Total Courses</span>
+            <span className="material-symbols-outlined text-[#c3c0ff] text-[20px]">library_books</span>
+          </div>
+          <div className="flex items-baseline gap-2 mt-3">
+            <span className="font-['Plus_Jakarta_Sans'] text-3xl font-bold text-white">{totalCourses}</span>
+            <span className="text-xs font-mono text-slate-400">in repository</span>
+          </div>
+          <div className="w-full bg-[#252f48] h-1.5 rounded-full mt-3 overflow-hidden">
+            <div className="bg-[#4f46e5] h-full rounded-full w-full" />
+          </div>
+        </div>
+
+        {/* Metric 2: Visible Courses */}
+        <div className="p-5 rounded-2xl bg-[#151b2c] border border-white/[0.08] flex flex-col justify-between shadow-lg">
+          <div className="flex items-center justify-between text-slate-400">
+            <span className="text-xs font-semibold uppercase tracking-wider">Active &amp; Visible</span>
+            <span className="material-symbols-outlined text-[#06b6d4] text-[20px]">visibility</span>
+          </div>
+          <div className="flex items-baseline gap-2 mt-3">
+            <span className="font-['Plus_Jakarta_Sans'] text-3xl font-bold text-[#06b6d4]">{visibleCourses}</span>
+            <span className="text-xs font-mono text-slate-400">/ {totalCourses} courses</span>
+          </div>
+          <div className="w-full bg-[#252f48] h-1.5 rounded-full mt-3 overflow-hidden">
+            <div
+              className="bg-[#06b6d4] h-full rounded-full"
+              style={{ width: `${totalCourses > 0 ? (visibleCourses / totalCourses) * 100 : 0}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Metric 3: Hidden Courses */}
+        <div className="p-5 rounded-2xl bg-[#151b2c] border border-white/[0.08] flex flex-col justify-between shadow-lg">
+          <div className="flex items-center justify-between text-slate-400">
+            <span className="text-xs font-semibold uppercase tracking-wider">Hidden / Archived</span>
+            <span className="material-symbols-outlined text-slate-400 text-[20px]">visibility_off</span>
+          </div>
+          <div className="flex items-baseline gap-2 mt-3">
+            <span className="font-['Plus_Jakarta_Sans'] text-3xl font-bold text-slate-400">{hiddenCourses}</span>
+            <span className="text-xs font-mono text-slate-500">hidden from public</span>
+          </div>
+          <div className="w-full bg-[#252f48] h-1.5 rounded-full mt-3 overflow-hidden">
+            <div
+              className="bg-slate-500 h-full rounded-full"
+              style={{ width: `${totalCourses > 0 ? (hiddenCourses / totalCourses) * 100 : 0}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Metric 4: Total Occupancy */}
+        <div className="p-5 rounded-2xl bg-[#151b2c] border border-white/[0.08] flex flex-col justify-between shadow-lg">
+          <div className="flex items-center justify-between text-slate-400">
+            <span className="text-xs font-semibold uppercase tracking-wider">Seat Occupancy</span>
+            <span className="material-symbols-outlined text-emerald-400 text-[20px]">group</span>
+          </div>
+          <div className="flex items-baseline gap-2 mt-3">
+            <span className="font-['Plus_Jakarta_Sans'] text-3xl font-bold text-white">{totalEnrolled}</span>
+            <span className="text-xs font-mono text-emerald-400 font-bold">
+              / {totalCapacity} ({overallOccupancy}%)
+            </span>
+          </div>
+          <div className="w-full bg-[#252f48] h-1.5 rounded-full mt-3 overflow-hidden">
+            <div
+              className="bg-emerald-400 h-full rounded-full"
+              style={{ width: `${overallOccupancy}%` }}
+            />
+          </div>
+        </div>
       </div>
 
+      {/* Toolbar: Search & Filters */}
+      <div className="bg-[#0f1422] p-4 rounded-xl border border-white/[0.08] flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 shadow-md">
+        <div className="flex flex-wrap items-center gap-3 flex-1">
+          {/* Search box */}
+          <div className="relative flex-1 min-w-[240px] max-w-md">
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">
+              search
+            </span>
+            <input
+              className="w-full pl-9 pr-10 py-2 rounded-lg bg-[#1c2438] text-white placeholder:text-slate-500 text-xs outline-none focus:ring-2 focus:ring-[#4f46e5] border border-white/[0.06]"
+              placeholder="Search by course or instructor..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+
+          {/* Category Filter */}
+          <div className="relative">
+            <select
+              className="appearance-none bg-[#1c2438] text-slate-200 text-xs font-semibold pl-3 pr-8 py-2 rounded-lg border border-white/[0.06] outline-none cursor-pointer focus:ring-2 focus:ring-[#4f46e5]"
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+            >
+              <option value="all">All categories</option>
+              <option value="Frontend">Frontend</option>
+              <option value="Backend">Backend</option>
+              <option value="Fullstack">Fullstack</option>
+              <option value="Database">Database</option>
+            </select>
+            <span className="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[16px]">
+              expand_more
+            </span>
+          </div>
+
+          {/* Visibility Filter Tabs */}
+          <div className="flex items-center p-1 rounded-lg bg-[#151b2c] border border-white/[0.06]">
+            <button
+              className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${
+                visibilityFilter === 'all'
+                  ? 'bg-[#4f46e5] text-white shadow-sm'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+              onClick={() => setVisibilityFilter('all')}
+            >
+              All ({totalCourses})
+            </button>
+            <button
+              className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${
+                visibilityFilter === 'visible'
+                  ? 'bg-[#4f46e5] text-white shadow-sm'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+              onClick={() => setVisibilityFilter('visible')}
+            >
+              Visible ({visibleCourses})
+            </button>
+            <button
+              className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${
+                visibilityFilter === 'hidden'
+                  ? 'bg-[#4f46e5] text-white shadow-sm'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+              onClick={() => setVisibilityFilter('hidden')}
+            >
+              Hidden ({hiddenCourses})
+            </button>
+          </div>
+        </div>
+
+        <Link
+          className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white font-medium"
+          to="/courses"
+        >
+          <span>View Public Catalog</span>
+          <span className="material-symbols-outlined text-[16px]">open_in_new</span>
+        </Link>
+      </div>
+
+      {/* Course Data Table & Mobile List */}
+      <section>
+        {loading ? (
+          <div className="h-64 rounded-2xl bg-[#151b2c] border border-white/[0.08] grid place-items-center text-sm text-slate-400 animate-pulse">
+            Loading courses...
+          </div>
+        ) : filteredCourses.length === 0 ? (
+          <div className="rounded-2xl border border-dashed border-white/15 bg-[#151b2c]/40 p-12 text-center text-slate-400">
+            <span className="material-symbols-outlined text-4xl text-slate-500 mb-2">folder_off</span>
+            <h2 className="font-['Plus_Jakarta_Sans'] text-lg font-bold text-white">No courses match your criteria</h2>
+            <p className="mt-1 text-xs text-slate-400">Try adjusting your search terms or filters.</p>
+          </div>
+        ) : (
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-hidden rounded-2xl border border-white/[0.08] bg-[#151b2c] shadow-xl">
+              <table className="w-full table-fixed border-collapse text-left text-xs text-slate-200">
+                <colgroup>
+                  <col className="w-[30%]" />
+                  <col className="w-[12%]" />
+                  <col className="w-[15%]" />
+                  <col className="w-[15%]" />
+                  <col className="w-[10%]" />
+                  <col className="w-[18%]" />
+                </colgroup>
+                <thead className="border-b border-white/[0.08] bg-[#0f1422] text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  <tr>
+                    <th className="px-5 py-4">Course Details</th>
+                    <th className="px-4 py-4">Category</th>
+                    <th className="px-4 py-4">Tuition</th>
+                    <th className="px-4 py-4">Enrollment Ratio</th>
+                    <th className="px-4 py-4 text-center">Visibility</th>
+                    <th className="px-4 py-4 text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/[0.04]">
+                  {filteredCourses.map((c) => (
+                    <tr className="hover:bg-[#1c2438]/60 transition-colors" key={c.id}>
+                      <td className="px-5 py-4">
+                        <p className="font-['Plus_Jakarta_Sans'] text-sm font-semibold text-white">{c.name}</p>
+                        <p className="text-[11px] text-slate-400 mt-0.5">Instructor: {c.instructor}</p>
+                      </td>
+                      <td className="px-4 py-4">
+                        <span className="px-2.5 py-1 rounded-full bg-cyan-500/10 text-[#06b6d4] text-[11px] font-semibold border border-cyan-500/20">
+                          {c.category}
+                        </span>
+                      </td>
+                      <td className="px-4 py-4 font-mono font-bold text-white">{formatFee(c.fee)}</td>
+                      <td className="px-4 py-4">
+                        <div className="flex flex-col gap-1.5 font-mono">
+                          <div className="flex justify-between items-center text-[11px]">
+                            <span className="text-slate-400">
+                              {c.enrolled_count} / {c.capacity}
+                            </span>
+                            <span className="text-slate-500 font-bold">
+                              {c.capacity > 0 ? Math.round((c.enrolled_count / c.capacity) * 100) : 0}%
+                            </span>
+                          </div>
+                          <div className="w-full bg-[#252f48] h-1.5 rounded-full overflow-hidden">
+                            <div
+                              className={`h-full rounded-full ${
+                                c.enrolled_count >= c.capacity ? 'bg-rose-500' : 'bg-emerald-400'
+                              }`}
+                              style={{
+                                width: `${c.capacity > 0 ? Math.min(100, (c.enrolled_count / c.capacity) * 100) : 0}%`,
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-4 text-center">
+                        <span
+                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold ${
+                            c.is_hidden
+                              ? 'bg-slate-500/10 text-slate-400 border border-slate-500/20'
+                              : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                          }`}
+                        >
+                          <span
+                            className={`size-1.5 rounded-full ${c.is_hidden ? 'bg-slate-400' : 'bg-emerald-400'}`}
+                          />
+                          <span>{c.is_hidden ? 'Hidden' : 'Visible'}</span>
+                        </span>
+                      </td>
+                      <td className="px-4 py-4 text-center">
+                        <div className="flex items-center justify-center gap-1.5">
+                          <button
+                            className="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
+                            onClick={() => openEdit(c)}
+                            title="Edit course"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">edit</span>
+                          </button>
+                          <button
+                            className="p-1.5 rounded-lg text-[#06b6d4] hover:bg-cyan-500/10 transition-colors"
+                            onClick={() => openStudents(c)}
+                            title="View enrolled students"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">group</span>
+                          </button>
+                          <button
+                            className="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
+                            onClick={() => toggleVisibility(c)}
+                            title={c.is_hidden ? 'Make visible' : 'Hide from catalog'}
+                          >
+                            <span className="material-symbols-outlined text-[18px]">
+                              {c.is_hidden ? 'visibility' : 'visibility_off'}
+                            </span>
+                          </button>
+                          <button
+                            className="p-1.5 rounded-lg text-rose-400 hover:bg-rose-500/10 transition-colors"
+                            onClick={() => setCourseToDelete(c)}
+                            title="Delete course"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">delete</span>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Card List View */}
+            <div className="grid gap-4 md:hidden">
+              {filteredCourses.map((c) => (
+                <article
+                  className="rounded-2xl border border-white/[0.08] bg-[#151b2c] p-5 shadow-lg flex flex-col gap-4"
+                  key={c.id}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <h3 className="font-['Plus_Jakarta_Sans'] font-bold text-base text-white">{c.name}</h3>
+                      <p className="text-xs text-slate-400 mt-0.5">{c.instructor}</p>
+                    </div>
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${
+                        c.is_hidden
+                          ? 'bg-slate-500/10 text-slate-400 border border-slate-500/20'
+                          : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                      }`}
+                    >
+                      {c.is_hidden ? 'Hidden' : 'Visible'}
+                    </span>
+                  </div>
+
+                  <dl className="grid grid-cols-2 gap-3 text-xs font-mono border-y border-white/[0.06] py-3">
+                    <div>
+                      <dt className="text-slate-500">Category</dt>
+                      <dd className="text-white font-semibold mt-0.5">{c.category}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-slate-500">Tuition</dt>
+                      <dd className="text-[#06b6d4] font-bold mt-0.5">{formatFee(c.fee)}</dd>
+                    </div>
+                    <div className="col-span-2">
+                      <dt className="text-slate-500">Capacity</dt>
+                      <dd className="text-white font-semibold mt-0.5">
+                        {c.enrolled_count} / {c.capacity} students
+                      </dd>
+                    </div>
+                  </dl>
+
+                  <div className="flex items-center justify-between gap-2 pt-1">
+                    <button
+                      className="flex-1 py-2 px-3 rounded-lg bg-[#252f48] text-white text-xs font-semibold hover:bg-[#313b55]"
+                      onClick={() => openEdit(c)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="flex-1 py-2 px-3 rounded-lg bg-cyan-500/20 text-[#06b6d4] text-xs font-semibold hover:bg-cyan-500/30 border border-cyan-500/30"
+                      onClick={() => openStudents(c)}
+                    >
+                      Students
+                    </button>
+                    <button
+                      className="py-2 px-3 rounded-lg bg-white/5 text-slate-300 text-xs font-semibold hover:bg-white/10"
+                      onClick={() => toggleVisibility(c)}
+                    >
+                      {c.is_hidden ? 'Show' : 'Hide'}
+                    </button>
+                    <button
+                      className="py-2 px-3 rounded-lg bg-rose-500/10 text-rose-400 text-xs font-semibold hover:bg-rose-500/20 border border-rose-500/20"
+                      onClick={() => setCourseToDelete(c)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </>
+        )}
+      </section>
+
+      {/* Modals */}
       {formOpen && (
         <CourseModal
           form={form}
@@ -191,270 +560,78 @@ export default function AdminPage() {
           onConfirm={() => deleteCourse(courseToDelete.id)}
         />
       )}
-    </>
-  )
-}
-
-function AdminSidebar({ courseCount }) {
-  return (
-    <aside className="h-full rounded-3xl border border-white/10 bg-slate-950/25 p-4 shadow-xl shadow-slate-950/15">
-      <div className="border-b border-white/10 px-3 pb-5">
-        <p className="text-[10px] font-bold tracking-[2px] text-blue-200">PKS COURSE</p>
-        <h2 className="mt-2 font-['Space_Grotesk'] text-xl font-semibold text-white">
-          Admin console
-        </h2>
-      </div>
-
-      <nav className="mt-5 grid gap-2">
-        <div className="flex items-center justify-between rounded-xl bg-linear-to-r from-blue-500 to-purple-600 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-purple-950/30">
-          <span>Course management</span>
-          <span className="rounded-full bg-white/15 px-2 py-0.5 text-xs">{courseCount}</span>
-        </div>
-
-        <Link
-          className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-bold text-slate-300 transition hover:bg-white/10 hover:text-white"
-          to="/courses"
-        >
-          <span>Home</span>
-        </Link>
-      </nav>
-
-      <div className="mt-6 border-t border-white/10 px-3 pt-5">
-        <p className="text-xs leading-relaxed text-slate-400">
-          Use Students in the table to open each course’s enrollment list.
-        </p>
-      </div>
-    </aside>
-  )
-}
-
-function CourseTable({ courses, loading, onEdit, onDelete, onStudents, onToggleVisibility }) {
-  if (loading) {
-    return (
-      <div className="grid min-h-48 place-items-center text-sm font-semibold text-slate-200">
-        Loading courses...
-      </div>
-    )
-  }
-
-  if (courses.length === 0) {
-    return (
-      <div className="rounded-2xl border border-dashed border-white/25 p-12 text-center text-slate-300">
-        No courses yet. Create the first course to start the catalog.
-      </div>
-    )
-  }
-
-  return (
-    <>
-      <div className="hidden overflow-x-auto rounded-3xl border border-white/20 bg-white shadow-[0_14px_36px_rgba(15,23,42,.18)] md:block">
-        <table className="w-full min-w-[880px] table-fixed border-collapse text-left text-sm text-slate-900">
-          <colgroup>
-            <col className="w-[25%]" />
-            <col className="w-[13%]" />
-            <col className="w-[15%]" />
-            <col className="w-[14%]" />
-            <col className="w-[13%]" />
-            <col className="w-[20%]" />
-          </colgroup>
-          <thead className="border-b border-slate-200 bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500">
-            <tr>
-              <th className="px-6 py-4">Course</th>
-              <th className="px-4 py-4">Category</th>
-              <th className="px-4 py-4">Fee</th>
-              <th className="px-4 py-4 text-center">Capacity</th>
-              <th className="px-4 py-4 text-center">Visibility</th>
-              <th className="px-4 py-4 text-center">Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {courses.map((course) => (
-              <tr
-                className="border-b border-slate-100 transition last:border-0 hover:bg-blue-50/45"
-                key={course.id}
-              >
-                <td className="px-6 py-5">
-                  <p className="font-['Space_Grotesk'] text-base font-semibold">{course.name}</p>
-                  <p className="mt-1 max-w-xs truncate text-xs text-slate-500">{course.instructor}</p>
-                </td>
-                <td className="px-4 py-5">
-                  <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
-                    {course.category}
-                  </span>
-                </td>
-                <td className="px-4 py-5 font-semibold text-blue-700">
-                  {formatFee(course.fee)}
-                </td>
-                <td className="px-4 py-5 text-center whitespace-nowrap">
-                  <span className="font-semibold">
-                    {course.enrolled_count} / {course.capacity}
-                  </span>
-                  <span className="block text-xs text-slate-500">enrolled</span>
-                </td>
-                <td className="px-4 py-5 text-center">
-                  <span
-                    className={`rounded-full px-3 py-1 text-xs font-bold ${
-                      course.is_hidden
-                        ? 'bg-slate-100 text-slate-500'
-                        : 'bg-emerald-50 text-emerald-700'
-                    }`}
-                  >
-                    {course.is_hidden ? 'Hidden' : 'Visible'}
-                  </span>
-                </td>
-                <td className="px-4 py-5">
-                  <div className="flex flex-wrap justify-center gap-1">
-                    <ActionButton onClick={() => onEdit(course)}>Edit</ActionButton>
-                    <ActionButton onClick={() => onStudents(course)}>Students</ActionButton>
-                    <ActionButton onClick={() => onToggleVisibility(course)}>
-                      {course.is_hidden ? 'Show' : 'Hide'}
-                    </ActionButton>
-                    <button
-                      className="rounded-lg px-2.5 py-2 text-xs font-bold text-red-600 transition hover:bg-red-50"
-                      onClick={() => onDelete(course)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="grid gap-3 md:hidden">
-        {courses.map((course) => (
-          <MobileCourseCard
-            key={course.id}
-            course={course}
-            onEdit={onEdit}
-            onDelete={onDelete}
-            onStudents={onStudents}
-            onToggleVisibility={onToggleVisibility}
-          />
-        ))}
-      </div>
-    </>
-  )
-}
-
-function MobileCourseCard({ course, onEdit, onDelete, onStudents, onToggleVisibility }) {
-  return (
-    <article className="rounded-2xl border border-white/20 bg-white p-5 text-slate-900 shadow-[0_10px_28px_rgba(15,23,42,.16)]">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h2 className="font-['Space_Grotesk'] text-lg font-semibold">{course.name}</h2>
-          <p className="mt-1 text-sm text-slate-500">{course.instructor}</p>
-        </div>
-        <span
-          className={`rounded-full px-3 py-1 text-xs font-bold ${
-            course.is_hidden ? 'bg-slate-100 text-slate-500' : 'bg-emerald-50 text-emerald-700'
-          }`}
-        >
-          {course.is_hidden ? 'Hidden' : 'Visible'}
-        </span>
-      </div>
-
-      <dl className="mt-5 grid grid-cols-2 gap-4 border-y border-slate-100 py-4 text-sm">
-        <div>
-          <dt className="text-xs font-bold uppercase tracking-wide text-slate-400">Category</dt>
-          <dd className="mt-1 font-semibold text-blue-700">{course.category}</dd>
-        </div>
-        <div>
-          <dt className="text-xs font-bold uppercase tracking-wide text-slate-400">Fee</dt>
-          <dd className="mt-1 font-semibold text-blue-700">{formatFee(course.fee)}</dd>
-        </div>
-        <div>
-          <dt className="text-xs font-bold uppercase tracking-wide text-slate-400">Capacity</dt>
-          <dd className="mt-1 font-semibold">
-            {course.enrolled_count} / {course.capacity} enrolled
-          </dd>
-        </div>
-      </dl>
-
-      <div className="mt-4 grid grid-cols-2 gap-2">
-        <ActionButton onClick={() => onEdit(course)}>Edit</ActionButton>
-        <ActionButton onClick={() => onStudents(course)}>Students</ActionButton>
-        <ActionButton onClick={() => onToggleVisibility(course)}>
-          {course.is_hidden ? 'Show course' : 'Hide course'}
-        </ActionButton>
-        <button
-          className="rounded-lg px-2.5 py-2 text-xs font-bold text-red-600 transition hover:bg-red-50"
-          onClick={() => onDelete(course)}
-        >
-          Delete
-        </button>
-      </div>
-    </article>
-  )
-}
-
-function ActionButton({ children, onClick }) {
-  return (
-    <button
-      className="rounded-lg px-2.5 py-2 text-xs font-bold text-blue-700 transition hover:bg-blue-100 hover:text-purple-700"
-      onClick={onClick}
-    >
-      {children}
-    </button>
+    </div>
   )
 }
 
 function CourseModal({ form, loading, isEditing, onChange, onSubmit, onClose }) {
   return (
     <Modal onClose={onClose}>
-      <form className="grid gap-5" onSubmit={onSubmit}>
-        <div className="flex items-start justify-between gap-4">
+      <form className="flex flex-col gap-5" onSubmit={onSubmit}>
+        <div className="flex items-start justify-between gap-4 pb-4 border-b border-white/[0.08]">
           <div>
-            <p className="text-[11px] font-bold tracking-[2px] text-blue-600">
-              {isEditing ? 'EDIT COURSE' : 'NEW COURSE'}
+            <p className="text-[10px] font-bold tracking-[2px] text-[#06b6d4] uppercase">
+              {isEditing ? 'UPDATE SPECIFICATIONS' : 'NEW COURSE DEFINITION'}
             </p>
-            <h2 className="mt-2 font-['Space_Grotesk'] text-2xl font-semibold">
-              {isEditing ? 'Update course' : 'Create course'}
+            <h2 className="font-['Plus_Jakarta_Sans'] text-2xl font-bold text-white mt-1">
+              {isEditing ? 'Edit Course' : 'Create New Course'}
             </h2>
           </div>
           <button
-            className="rounded-full border border-slate-200 px-3 py-1.5 text-sm font-bold text-slate-600 hover:bg-slate-50"
+            className="size-8 rounded-full bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center transition-colors"
             type="button"
             onClick={onClose}
           >
-            Close
+            <span className="material-symbols-outlined text-[18px]">close</span>
           </button>
         </div>
 
         <AdminField
-          label="Course name"
+          label="Course Name"
           value={form.name}
           onChange={(value) => onChange('name', value)}
-          required
-        />
-        <AdminField
-          label="Category"
-          value={form.category}
-          onChange={(value) => onChange('category', value)}
-          required
-        />
-        <AdminField
-          label="Instructor"
-          value={form.instructor}
-          onChange={(value) => onChange('instructor', value)}
+          placeholder="e.g. Distributed Systems Architecture"
           required
         />
 
-        <label className="grid gap-2 text-xs font-bold text-slate-600">
-          Description
+        <div className="grid gap-4 sm:grid-cols-2">
+          <label className="flex flex-col gap-1.5 text-xs font-semibold text-slate-300">
+            <span>Category</span>
+            <select
+              className="rounded-xl border border-white/10 bg-[#0f1422] px-4 py-2.5 text-xs text-white outline-none focus:border-[#4f46e5] focus:ring-2 focus:ring-[#4f46e5]/20 cursor-pointer"
+              value={form.category}
+              onChange={(e) => onChange('category', e.target.value)}
+              required
+            >
+              <option value="Frontend">Frontend</option>
+              <option value="Backend">Backend</option>
+              <option value="Fullstack">Fullstack</option>
+              <option value="Database">Database</option>
+            </select>
+          </label>
+
+          <AdminField
+            label="Lead Instructor"
+            value={form.instructor}
+            onChange={(value) => onChange('instructor', value)}
+            placeholder="e.g. Le Minh Hoang"
+            required
+          />
+        </div>
+
+        <label className="flex flex-col gap-1.5 text-xs font-semibold text-slate-300">
+          <span>Course Description</span>
           <textarea
-            className="min-h-28 rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/15"
+            className="min-h-24 rounded-xl border border-white/10 bg-[#0f1422] px-4 py-3 text-xs text-white outline-none focus:border-[#4f46e5] focus:ring-2 focus:ring-[#4f46e5]/20 resize-y"
+            placeholder="Outline course objectives, scope and prerequisites..."
             value={form.description}
-            onChange={(event) => onChange('description', event.target.value)}
+            onChange={(e) => onChange('description', e.target.value)}
           />
         </label>
 
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2">
           <AdminField
-            label="Fee (VND)"
+            label="Tuition Fee (VND)"
             type="number"
             min="0"
             step="1000"
@@ -463,7 +640,7 @@ function CourseModal({ form, loading, isEditing, onChange, onSubmit, onClose }) 
             required
           />
           <AdminField
-            label="Capacity"
+            label="Cohort Capacity"
             type="number"
             min="1"
             value={form.capacity}
@@ -472,25 +649,35 @@ function CourseModal({ form, loading, isEditing, onChange, onSubmit, onClose }) 
           />
         </div>
 
-        <button
-          className="rounded-xl bg-linear-to-r from-blue-500 to-purple-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-purple-500/20 transition hover:from-blue-600 hover:to-purple-700 disabled:opacity-40"
-          disabled={loading}
-        >
-          {isEditing ? 'Save changes' : 'Create course'}
-        </button>
+        <div className="pt-4 border-t border-white/[0.08] flex items-center justify-end gap-3">
+          <button
+            className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+            type="button"
+            onClick={onClose}
+          >
+            Cancel
+          </button>
+          <button
+            className="px-5 py-2.5 rounded-xl bg-[#4f46e5] hover:bg-[#6366f1] text-xs font-bold text-white shadow-[0_0_16px_rgba(79,70,229,0.35)] transition-all disabled:opacity-50"
+            disabled={loading}
+          >
+            {isEditing ? 'Save Changes' : 'Create Course'}
+          </button>
+        </div>
       </form>
     </Modal>
   )
 }
 
-function AdminField({ label, type = 'text', value, onChange, ...props }) {
+function AdminField({ label, type = 'text', value, onChange, placeholder, ...props }) {
   return (
-    <label className="grid gap-2 text-xs font-bold text-slate-600">
-      {label}
+    <label className="flex flex-col gap-1.5 text-xs font-semibold text-slate-300">
+      <span>{label}</span>
       <input
-        className="rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/15"
+        className="rounded-xl border border-white/10 bg-[#0f1422] px-4 py-2.5 text-xs text-white outline-none focus:border-[#4f46e5] focus:ring-2 focus:ring-[#4f46e5]/20 placeholder:text-slate-500"
         type={type}
         value={value}
+        placeholder={placeholder}
         onChange={(event) => onChange(event.target.value)}
         {...props}
       />
@@ -498,66 +685,76 @@ function AdminField({ label, type = 'text', value, onChange, ...props }) {
   )
 }
 
-function formatFee(fee) {
-  return new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
-    maximumFractionDigits: 0,
-  }).format(Number(fee || 0))
-}
-
 function StudentModal({ course, students, onClose }) {
   return (
     <Modal onClose={onClose} wide>
-      <div className="mb-6 flex items-start justify-between gap-4">
-        <div>
-          <p className="text-[10px] font-bold tracking-[2px] text-blue-600">ENROLLMENTS</p>
-          <h2 className="mt-2 font-['Space_Grotesk'] text-2xl font-semibold">{course.name}</h2>
+      <div className="flex flex-col gap-5">
+        <div className="flex items-start justify-between gap-4 pb-4 border-b border-white/[0.08]">
+          <div>
+            <p className="text-[10px] font-bold tracking-[2px] text-[#06b6d4] uppercase">
+              REGISTERED COHORT ROSTER
+            </p>
+            <h2 className="font-['Plus_Jakarta_Sans'] text-2xl font-bold text-white mt-1">
+              {course.name}
+            </h2>
+            <p className="text-xs text-slate-400 mt-1 font-mono">
+              Total Enrolled: {students.length} / {course.capacity} students
+            </p>
+          </div>
+          <button
+            className="size-8 rounded-full bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center transition-colors"
+            onClick={onClose}
+          >
+            <span className="material-symbols-outlined text-[18px]">close</span>
+          </button>
         </div>
-        <button
-          className="rounded-full border border-slate-200 px-4 py-2 text-sm font-bold hover:bg-slate-50"
-          onClick={onClose}
-        >
-          Close
-        </button>
-      </div>
 
-      {students.length === 0 ? (
-        <p className="py-10 text-center text-sm text-slate-500">No students enrolled yet.</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[650px] border-collapse text-left text-sm">
-            <thead>
-              <tr className="border-b border-slate-200 text-xs uppercase tracking-wider text-slate-500">
-                <th className="px-4 py-3">Name</th>
-                <th className="px-4 py-3">Email</th>
-                <th className="px-4 py-3">Course</th>
-                <th className="px-4 py-3">Enrolled at</th>
-                <th className="px-4 py-3">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {students.map((student) => (
-                <tr className="border-b border-slate-100" key={student.id}>
-                  <td className="px-4 py-4 font-semibold">{student.full_name}</td>
-                  <td className="px-4 py-4 text-slate-500">{student.email}</td>
-                  <td className="px-4 py-4 text-slate-500">
-                    {student.course_name || course.name}
-                  </td>
-                  <td className="px-4 py-4 text-slate-500">
-                    {new Date(student.enrolled_at).toLocaleDateString()}
-                  </td>
-                  <td className="px-4 py-4">
-                    <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
-                      {student.status || 'ENROLLED'}
-                    </span>
-                  </td>
+        {students.length === 0 ? (
+          <div className="py-12 text-center text-slate-400">
+            <span className="material-symbols-outlined text-4xl text-slate-600 mb-2">person_off</span>
+            <p className="font-semibold text-sm text-slate-300">No students enrolled yet</p>
+            <p className="text-xs text-slate-500 mt-1">This cohort is currently open and awaiting registrations.</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto rounded-xl border border-white/[0.08] bg-[#0f1422]">
+            <table className="w-full min-w-[600px] border-collapse text-left text-xs">
+              <thead className="border-b border-white/[0.08] bg-[#151b2c] text-[10px] uppercase font-bold tracking-wider text-slate-400">
+                <tr>
+                  <th className="px-4 py-3">Student Name</th>
+                  <th className="px-4 py-3">Email Address</th>
+                  <th className="px-4 py-3">Registration Date</th>
+                  <th className="px-4 py-3 text-center">Enrollment Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-white/[0.04] text-slate-300">
+                {students.map((student) => (
+                  <tr className="hover:bg-white/[0.02] transition-colors" key={student.id}>
+                    <td className="px-4 py-3.5 font-semibold text-white">{student.full_name}</td>
+                    <td className="px-4 py-3.5 font-mono text-slate-400">{student.email}</td>
+                    <td className="px-4 py-3.5 font-mono text-slate-400">
+                      {formatDate(student.enrolled_at)}
+                    </td>
+                    <td className="px-4 py-3.5 text-center">
+                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold text-[10px]">
+                        {student.status || 'CONFIRMED'}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        <div className="pt-4 border-t border-white/[0.08] flex justify-end">
+          <button
+            className="px-4 py-2 rounded-xl bg-[#252f48] text-white hover:bg-[#313b55] text-xs font-semibold transition-all"
+            onClick={onClose}
+          >
+            Close Roster
+          </button>
         </div>
-      )}
+      </div>
     </Modal>
   )
 }
@@ -565,26 +762,33 @@ function StudentModal({ course, students, onClose }) {
 function DeleteModal({ course, onCancel, onConfirm }) {
   return (
     <Modal onClose={onCancel}>
-      <p className="text-xs font-bold uppercase tracking-widest text-red-500">Delete course</p>
-      <h2 className="mt-3 font-['Space_Grotesk'] text-2xl font-semibold">
-        Delete “{course.name}”?
-      </h2>
-      <p className="mt-3 text-sm leading-relaxed text-slate-500">
-        This action cannot be undone. Courses with enrolled students will be rejected by the server.
-      </p>
-      <div className="mt-7 flex justify-end gap-3">
-        <button
-          className="rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold"
-          onClick={onCancel}
-        >
-          Cancel
-        </button>
-        <button
-          className="rounded-xl bg-red-500 px-4 py-2 text-sm font-bold text-white hover:bg-red-600"
-          onClick={onConfirm}
-        >
-          Delete course
-        </button>
+      <div className="flex flex-col gap-4">
+        <div className="size-12 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
+          <span className="material-symbols-outlined text-2xl">warning</span>
+        </div>
+        <div>
+          <h2 className="font-['Plus_Jakarta_Sans'] text-xl font-bold text-white">
+            Delete “{course.name}”?
+          </h2>
+          <p className="mt-2 text-xs leading-relaxed text-slate-400">
+            This action is irreversible. If students are currently enrolled in this course,
+            the backend server will strictly prevent deletion to preserve data integrity.
+          </p>
+        </div>
+        <div className="mt-4 pt-4 border-t border-white/[0.08] flex justify-end gap-3">
+          <button
+            className="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition-colors"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+          <button
+            className="px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-xs font-bold text-white shadow-lg transition-all"
+            onClick={onConfirm}
+          >
+            Confirm Delete
+          </button>
+        </div>
       </div>
     </Modal>
   )
@@ -593,16 +797,16 @@ function DeleteModal({ course, onCancel, onConfirm }) {
 function Modal({ children, onClose, wide = false }) {
   return (
     <div
-      className="fixed inset-0 z-50 grid place-items-center bg-slate-950/65 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 grid place-items-center bg-[#070a12]/80 backdrop-blur-md p-4"
       role="dialog"
       aria-modal="true"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose()
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) onClose()
       }}
     >
       <div
-        className={`max-h-[90vh] w-full overflow-y-auto rounded-2xl border border-white/70 bg-white p-6 text-slate-900 shadow-2xl ${
-          wide ? 'max-w-5xl' : 'max-w-xl'
+        className={`max-h-[90vh] w-full overflow-y-auto rounded-2xl border border-white/[0.12] bg-[#1c2438] p-6 text-slate-200 shadow-2xl ${
+          wide ? 'max-w-4xl' : 'max-w-xl'
         }`}
       >
         {children}

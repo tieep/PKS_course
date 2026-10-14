@@ -38,11 +38,11 @@ export default function AuthPage({ mode = 'login' }) {
     try {
       if (isLogin) {
         const signedInUser = await login(form.email, form.password)
-        toast.success('Welcome back.')
+        toast.success('Welcome back!')
         navigate(safeRedirect(location.search) || (signedInUser.role === 'ADMIN' ? '/admin' : '/courses'))
       } else {
         const signedInUser = await register(form.fullName, form.email, form.password)
-        toast.success('Your account is ready.')
+        toast.success('Account created successfully!')
         navigate(safeRedirect(location.search) || (signedInUser.role === 'ADMIN' ? '/admin' : '/courses'))
       }
     } catch (error) {
@@ -53,44 +53,118 @@ export default function AuthPage({ mode = 'login' }) {
   }
 
   return (
-    <section className="grid min-h-[70vh] items-center gap-12 lg:grid-cols-[1.15fr_.85fr]">
-      <div className="relative overflow-hidden rounded-[2rem] bg-linear-to-br from-blue-600 via-indigo-600 to-purple-700 p-8 text-white md:p-12">
-        <div className="absolute -right-10 -top-10 size-44 rounded-full bg-purple-400/40" />
-        <div className="absolute -bottom-20 -left-10 size-52 rounded-full border-[24px] border-blue-300/50" />
-        <div className="relative max-w-xl">
-          <p className="mb-12 text-[11px] font-bold tracking-[2px] text-blue-100">PKS / LEARNING SYSTEM</p>
-          <h1 className="font-['Space_Grotesk'] text-5xl font-semibold leading-[.98] tracking-[-2px] md:text-7xl">
-            Make your next skill count.
+    <section className="grid min-h-[75vh] items-center gap-8 lg:grid-cols-[1.1fr_0.9fr] max-w-6xl mx-auto py-6">
+      {/* Visual Brand Panel */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#151b2c] via-[#1c2438] to-[#0f1422] p-8 md:p-12 border border-white/[0.08] shadow-2xl flex flex-col justify-between min-h-[460px]">
+        <div className="absolute -right-16 -top-16 size-64 rounded-full bg-[#4f46e5]/20 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-20 -left-16 size-72 rounded-full bg-[#06b6d4]/15 blur-3xl pointer-events-none" />
+
+        <div className="relative z-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0a0e18]/80 text-[#06b6d4] border border-cyan-500/20 text-xs font-semibold uppercase tracking-wider mb-8">
+            <span className="size-2 rounded-full bg-[#06b6d4] animate-pulse" />
+            <span>PKS / Learning Portal</span>
+          </div>
+
+          <h1 className="font-['Plus_Jakarta_Sans'] text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight tracking-tight text-white">
+            Master your next engineering discipline.
           </h1>
-          <p className="mt-7 max-w-md text-lg leading-relaxed text-[#c8d0c8]">
-            Find focused courses, learn from experienced instructors, and keep your progress in one calm workspace.
+
+          <p className="mt-5 text-sm sm:text-base leading-relaxed text-slate-300 max-w-md">
+            Hands-on curriculum guided by senior practitioners. Register with confidence on our
+            atomic race-condition protected portal.
           </p>
+        </div>
+
+        <div className="relative z-10 pt-8 border-t border-white/[0.08] flex flex-wrap gap-4 text-xs text-slate-400 font-medium">
+          <div className="flex items-center gap-1.5">
+            <span className="material-symbols-outlined text-[#06b6d4] text-[18px]">verified</span>
+            <span>Verified Credentials</span>
+          </div>
+          <div className="size-1 rounded-full bg-slate-600 self-center" />
+          <div className="flex items-center gap-1.5">
+            <span className="material-symbols-outlined text-[#06b6d4] text-[18px]">code</span>
+            <span>Production Labs</span>
+          </div>
         </div>
       </div>
 
-      <form className="grid gap-5 rounded-[2rem] border border-slate-200 bg-white p-7 text-slate-900 shadow-[0_22px_60px_rgba(15,23,42,.22)] md:p-9" onSubmit={handleSubmit}>
-        <div>
-          <p className="text-[11px] font-bold tracking-[2px] text-blue-600">{isLogin ? 'WELCOME BACK' : 'NEW ACCOUNT'}</p>
-          <h2 className="mt-3 font-['Space_Grotesk'] text-3xl font-semibold tracking-tight">
-            {isLogin ? 'Sign in to continue' : 'Create your account'}
-          </h2>
-        </div>
+      {/* Form Card */}
+      <div className="rounded-3xl border border-white/[0.08] bg-[#151b2c] p-7 md:p-10 shadow-2xl">
+        <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+          <div>
+            <p className="text-[10px] font-bold tracking-[2px] text-[#06b6d4] uppercase">
+              {isLogin ? 'AUTHENTICATION' : 'NEW REGISTRATION'}
+            </p>
+            <h2 className="mt-1 font-['Plus_Jakarta_Sans'] text-2xl font-bold text-white tracking-tight">
+              {isLogin ? 'Sign in to continue' : 'Create your account'}
+            </h2>
+            <p className="text-xs text-slate-400 mt-1">
+              {isLogin
+                ? 'Enter your registered credentials to access your courses.'
+                : 'Fill in your details to start your enrollment.'}
+            </p>
+          </div>
 
-        {!isLogin && <FormField label="Full name" value={form.fullName} onChange={(value) => updateField('fullName', value)} minLength={2} required />}
-        <FormField label="Email" type="email" value={form.email} onChange={(value) => updateField('email', value)} required />
-        <FormField label="Password" type="password" value={form.password} onChange={(value) => updateField('password', value)} minLength={6} required />
-        {!isLogin && <FormField label="Confirm password" type="password" value={form.confirmPassword} onChange={(value) => updateField('confirmPassword', value)} minLength={6} required />}
+          {!isLogin && (
+            <FormField
+              label="Full Name"
+              placeholder="e.g. Nguyen Van An"
+              value={form.fullName}
+              onChange={(value) => updateField('fullName', value)}
+              minLength={2}
+              required
+            />
+          )}
 
-        <button className="mt-2 rounded-full bg-linear-to-r from-blue-500 to-purple-600 px-5 py-3.5 text-sm font-bold text-white shadow-md shadow-purple-500/20 transition hover:from-blue-600 hover:to-purple-700 disabled:cursor-not-allowed disabled:opacity-50" disabled={submitting}>
-          {submitting ? 'Working...' : isLogin ? 'Sign in' : 'Create account'}
-        </button>
-        <p className="text-center text-sm text-[#66716e]">
-          {isLogin ? 'New here?' : 'Already registered?'}{' '}
-          <Link className="font-bold text-blue-600 hover:text-purple-600 hover:underline" to={isLogin ? '/register' : '/login'}>
-            {isLogin ? 'Create an account' : 'Sign in'}
-          </Link>
-        </p>
-      </form>
+          <FormField
+            label="Email Address"
+            type="email"
+            placeholder="student@example.com"
+            value={form.email}
+            onChange={(value) => updateField('email', value)}
+            required
+          />
+
+          <FormField
+            label="Password"
+            type="password"
+            placeholder="••••••••"
+            value={form.password}
+            onChange={(value) => updateField('password', value)}
+            minLength={6}
+            required
+          />
+
+          {!isLogin && (
+            <FormField
+              label="Confirm Password"
+              type="password"
+              placeholder="••••••••"
+              value={form.confirmPassword}
+              onChange={(value) => updateField('confirmPassword', value)}
+              minLength={6}
+              required
+            />
+          )}
+
+          <button
+            className="mt-2 w-full py-3 px-4 rounded-xl bg-[#4f46e5] hover:bg-[#6366f1] text-xs font-bold text-white shadow-[0_0_20px_rgba(79,70,229,0.35)] transition-all disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={submitting}
+          >
+            {submitting ? 'Please wait...' : isLogin ? 'Sign In' : 'Create Account'}
+          </button>
+
+          <p className="text-center text-xs text-slate-400 mt-2">
+            {isLogin ? "Don't have an account yet?" : 'Already have an account?'}{' '}
+            <Link
+              className="font-bold text-[#06b6d4] hover:text-cyan-300 transition-colors"
+              to={isLogin ? '/register' : '/login'}
+            >
+              {isLogin ? 'Create an account' : 'Sign in'}
+            </Link>
+          </p>
+        </form>
+      </div>
     </section>
   )
 }
@@ -100,13 +174,14 @@ function safeRedirect(search) {
   return redirect?.startsWith('/') && !redirect.startsWith('//') ? redirect : null
 }
 
-function FormField({ label, type = 'text', value, onChange, ...props }) {
+function FormField({ label, type = 'text', value, placeholder, onChange, ...props }) {
   return (
-    <label className="grid gap-2 text-xs font-bold text-[#66716e]">
-      {label}
+    <label className="flex flex-col gap-1.5 text-xs font-semibold text-slate-300">
+      <span>{label}</span>
       <input
-        className="rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/15"
+        className="rounded-xl border border-white/10 bg-[#0f1422] px-4 py-2.5 text-xs text-white placeholder:text-slate-500 outline-none focus:border-[#4f46e5] focus:ring-2 focus:ring-[#4f46e5]/20 transition-all"
         type={type}
+        placeholder={placeholder}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         {...props}
